@@ -57,4 +57,11 @@ suite('CALS lib demonstrations', () => {
 		};
 		assert.strictEqual('Hello, Mum!', table.tgroup[0].tbody.row[0].entry[0].paracon );		
 	});
+	test ('A table needs one tgroups',() => {
+		const table: cals.Table = {
+			'pgwide': false,
+			'tgroup': []
+		};
+		assert.strictEqual(false, table.isValid());
+	});
 });
