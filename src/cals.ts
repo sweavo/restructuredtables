@@ -8,11 +8,11 @@
 */
 
 // Alignment enums
-type CalsAlign = "left" | "right" | "center" | "justify" | "char";
+export type CalsAlign = "left" | "right" | "center" | "justify" | "char";
 type CalsVAlign = "top" | "middle" | "bottom";
 
 // Entry: the content of a table cell. The paracon is a whole new document context (ideally)
-interface Entry {
+export interface Entry {
     colname: string;
     namest: string;
     nameend:string;
@@ -27,26 +27,26 @@ interface Entry {
 }
 
 // One table Row.
-interface Row {
+export interface Row {
     rowsep: boolean;
     valign: CalsVAlign;
     entry: Entry[];
 }
 
 // The table body Row(s)
-interface TBody {
+export interface TBody {
     valign: CalsVAlign;
     row: Row[];
 }
 
 // The table header Row(s)
-interface THead {
+export interface THead {
     valign: CalsVAlign;
     row: Row[];
 }
 
 // Column Specification
-interface ColSpec {
+export interface ColSpec {
     colnum: string;
     colname: string;
     colwidth: string;
@@ -58,7 +58,7 @@ interface ColSpec {
 }
 
 // TGroup: one uninterrupted layout of a subsection of the table, e.g. one pageful.
-interface TGroup {
+export interface TGroup {
     cols: number;
     colsep: boolean;
     rowsep: boolean;
@@ -69,7 +69,7 @@ interface TGroup {
 }
 
 // One logical table, which may span several pages or minipages, each with its own tgroup.
-interface Table{
+export interface Table{
     // omitted: stuff relating to titles and frame?!
     pgwide: boolean; 
     tgroup: TGroup[];
