@@ -51,17 +51,14 @@ suite('CALS lib demonstrations', () => {
 			'tbody': tbody,
 			'thead': []
 		};
-		const table: cals.Table = {
-			'pgwide': false,
-			'tgroup': [ tgroup ]
-		};
+		const table = new cals.Table( false,[ tgroup ]);
+
 		assert.strictEqual('Hello, Mum!', table.tgroup[0].tbody.row[0].entry[0].paracon );		
+		assert.strictEqual(true, table.isValid());
 	});
 	test ('A table needs one tgroups',() => {
-		const table: cals.Table = {
-			'pgwide': false,
-			'tgroup': []
-		};
+		const table = new cals.Table(false, []);
+
 		assert.strictEqual(false, table.isValid());
 	});
 });

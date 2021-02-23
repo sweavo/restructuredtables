@@ -69,9 +69,19 @@ export interface TGroup {
 }
 
 // One logical table, which may span several pages or minipages, each with its own tgroup.
-export interface Table{
+export class Table{
     // omitted: stuff relating to titles and frame?!
-    pgwide: boolean; 
-    tgroup: TGroup[];
-}
+    public  pgwide: boolean = false; 
+    public tgroup: TGroup[] = [];
 
+    constructor ( pgwide:boolean , tgroup: TGroup[] ) {
+        this.pgwide = pgwide;
+        this.tgroup = tgroup;
+    }
+    public isValid() {
+        if (this.tgroup.length === 0){
+            return false;
+        }
+        return true;
+    };
+}
