@@ -61,4 +61,27 @@ suite('CALS lib demonstrations', () => {
 
 		assert.strictEqual(false, table.isValid());
 	});
+
+	test('Parse a simple RST gridtable and regenerate it.', () => {
+		const input = `
+			+---+---+-----+
+			| A | B | Out |
+			+---+---+-----+
+			| 0 | 0 |  0  |
+			| 0 | 0 |  1  |
+			| 0 | 1 |  0  |
+			| 0 | 1 |  1  |
+			| 1 | 0 |  0  |
+			| 1 | 0 |  1  |
+			| 1 | 1 |  0  |
+			| 1 | 1 |  1  |
+			+---+---+-----+`;
+
+		const table = cals.fromGrid( input );
+
+		const output = cals.toGrid( table );
+
+		assert.strictEqual( input, output );
+
+	});
 });
