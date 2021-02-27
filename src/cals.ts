@@ -120,27 +120,21 @@ export class Table{
 // fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
 export function fromGrid( input:string ):Table {
     const lines = input.split('\n');
+
     // Use the first line to describe the columns:
+    const columnStrings =  lines[0].split('+').slice(1,-1);
+    const widths = columnStrings.map( (st) => { return  st.length - 2; });
 
-    const columnStrings =  lines[0].split('+');
+    // Scoop up the contents
+    let cells:string[][] = [];
 
-    const colspecs = columnStrings.map( (st) => { return new ColSpec( st.length ); } );
+    lines.forEach( (line) => {
+        if (line.substr(0,1) !== "+"){
+            cells.push( line.split('|').slice(1,-1).map((row) => {return row.trim();}) );
+        }
+    });
 
-    const headRow = new Row([new Entry("hello"), new Entry("mum")]);
-    const bodyRow = new Row([new Entry("wotcher"), new Entry("Mate")]);
-
-    const table = new Table(
-        [new TGroup(
-            colspecs,
-            false,
-            [
-                headRow,
-                bodyRow
-            ]
-        )]
-    );
-
-    return table;
+    return tableHelper( widths, cells );
 }
 
 export function tableHelper( widths: number[], entries: string[][]){

@@ -56,20 +56,20 @@ suite('CALS lib demonstrations', () => {
 		const input = `+---+---+-----+
 | A | B | Out |
 +---+---+-----+
-| 0 | 0 |  0  |
+| 0 | 0 | 0   |
 +---+---+-----+
-| 0 | 1 |  0  |
+| 0 | 1 | 0   |
 +---+---+-----+
-| 1 | 0 |  0  |
+| 1 | 0 | 0   |
 +---+---+-----+
-| 1 | 1 |  1  |
+| 1 | 1 | 1   |
 +---+---+-----+`;
 
 		const table = cals.fromGrid( input );
 
 		const output = cals.toGrid( table );
 
-		//assert.strictEqual( input, output );
+		assert.strictEqual( input, output );
 
 	});
 });
