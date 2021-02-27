@@ -161,10 +161,11 @@ export function toGrid( input:Table ): string {
 
     let lines = [headPlate];
     const rows = input.tgroup[0].tbody.row.map( (row: Row) => {
-        return row.entry.map( (entry, i) => {
-            lines.push('| ' + entry.paracon.padEnd(colwidths[i], ' ') + ' |');
-            lines.push(headPlate);
-        });
+        
+        lines.push( '| ' + row.entry.map( (entry, i) => {
+            return entry.paracon.padEnd(colwidths[i], ' ');
+        }).join(' | ') + ' |');
+        lines.push(headPlate);
     });
     return lines.join('\n');
 }

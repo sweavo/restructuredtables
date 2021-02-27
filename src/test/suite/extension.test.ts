@@ -21,24 +21,35 @@ suite('CALS lib demonstrations', () => {
 		assert.strictEqual(true, table.isValid());
 	});
 	test ('A table needs one tgroups',() => {
+		
 		const table = new cals.Table([]);
 
 		assert.strictEqual(false, table.isValid());
+
 	});
-	test ('Write a simple table as grid', () => {
-		const table = new cals.Table(
-			[ new cals.TGroup( 
-				[new cals.ColSpec(2)],
-				false,
-				[
-					new cals.Row([new cals.Entry("Yo")])
-				]
-			) ]
-		);
-
-		const output = cals.toGrid( table );
-
+	test ('toGrid: write a 1x1 grid', () => {	
+		
+		const output = cals.toGrid( cals.tableHelper([2],[['Yo']]) );
+		
 		assert.strictEqual( output, '+----+\n| Yo |\n+----+');
+
+	});
+
+	test ('toGrid: write one two-column row', () => {	
+		
+		const output = cals.toGrid( cals.tableHelper([2,5],[['Yo', 'There']]) );
+		
+		assert.strictEqual( output, '+----+-------+\n| Yo | There |\n+----+-------+');
+
+	});
+
+	test ('toGrid: write two two-column rows', () => {	
+		
+		const output = cals.toGrid( cals.tableHelper([2,5],[['Yo', 'There'],
+															['Hi', 'Matey']]) );
+		
+		assert.strictEqual( output, '+----+-------+\n| Yo | There |\n+----+-------+\n| Hi | Matey |\n+----+-------+');
+
 	});
 
 	test('Parse a simple RST gridtable and regenerate it (disabled).', () => {
