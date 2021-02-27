@@ -7,65 +7,95 @@
     and decoders respectively.
 */
 
+import { debug } from "console";
+import { Recoverable } from "repl";
+import { runInNewContext } from "vm";
+
 // Alignment enums
 export type CalsAlign = "left" | "right" | "center" | "justify" | "char";
 type CalsVAlign = "top" | "middle" | "bottom";
 
 // Entry: the content of a table cell. The paracon is a whole new document context (ideally)
-export interface Entry {
-    colname: string;
-    namest: string;
-    nameend:string;
-    morerows:string;
-    colsep:boolean;
-    rowsep:boolean;
-    align: CalsAlign;
-    char: string;
-    charoff:string;
-    valign: CalsVAlign;
+export class Entry {
+    constructor (paracon:string){
+        this.paracon =paracon;
+    }
+    colname?: string;
+    namest?: string;
+    nameend?:string;
+    morerows?:string;
+    colsep?:boolean;
+    rowsep?:boolean;
+    align?: CalsAlign;
+    char?: string;
+    charoff?:string;
+    valign?: CalsVAlign;
     paracon: string;
 }
 
 // One table Row.
-export interface Row {
-    rowsep: boolean;
-    valign: CalsVAlign;
+export class Row {
+    constructor (entries: Entry[]) {
+        this.entry = entries;
+    };    
+    rowsep?: boolean;
+    valign?: CalsVAlign;
     entry: Entry[];
 }
 
 // The table body Row(s)
-export interface TBody {
-    valign: CalsVAlign;
+export class TBody {
+    constructor (rows: Row[]){
+        this.row = rows;
+    }
+    valign?: CalsVAlign;
     row: Row[];
 }
 
 // The table header Row(s)
-export interface THead {
-    valign: CalsVAlign;
+export class THead {
+    constructor (rows: Row[]){
+        this.row = rows;
+    }
+    valign?: CalsVAlign;
     row: Row[];
 }
 
 // Column Specification
-export interface ColSpec {
-    colnum: string;
-    colname: string;
+export class ColSpec {
+    constructor (colwidth: number) {
+        this.colwidth = colwidth.toString();
+    };
+    colnum?: string;
+    colname?: string;
     colwidth: string;
-    colsep: boolean;
-    rowsep: boolean;
-    align: CalsAlign;
-    char: string;
-    charoff: string;
+    colsep?: boolean;
+    rowsep?: boolean;
+    align?: CalsAlign;
+    char?: string;
+    charoff?: string;
 }
 
 // TGroup: one uninterrupted layout of a subsection of the table, e.g. one pageful.
-export interface TGroup {
+export class TGroup {
     cols: number;
-    colsep: boolean;
-    rowsep: boolean;
-    align: CalsAlign;
+    colsep?: boolean;
+    rowsep?: boolean;
+    align?: CalsAlign;
     colspecs: ColSpec[];
-    thead: THead[]; // 0..1
+    thead?: THead; // 0..1
     tbody: TBody;
+    constructor ( colspecs: ColSpec[], hasHead: boolean, rows: Row[]){
+        this.colspecs = colspecs;
+        this.cols = this.colspecs.length;
+        if (hasHead){
+            this.thead=new THead(rows=[rows[0]]);
+            this.tbody=new TBody(rows=rows.slice(1));
+        }else{
+            this.thead=undefined;
+            this.tbody=new TBody(rows);
+        }
+    }
 }
 
 // One logical table, which may span several pages or minipages, each with its own tgroup.
@@ -74,8 +104,8 @@ export class Table{
     public  pgwide: boolean = false; 
     public tgroup: TGroup[] = [];
 
-    constructor ( pgwide:boolean , tgroup: TGroup[] ) {
-        this.pgwide = pgwide;
+    constructor ( tgroup: TGroup[] ) {
+        this.pgwide = false;
         this.tgroup = tgroup;
     }
     public isValid() {
@@ -84,4 +114,50 @@ export class Table{
         }
         return true;
     };
+}
+
+
+// fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
+export function fromGrid( input:string ):Table {
+    const lines = input.split('\n');
+    // Use the first line to describe the columns:
+
+    const columnStrings =  lines[0].split('+');
+
+    const colspecs = columnStrings.map( (st) => { return new ColSpec( st.length ); } );
+
+    const headRow = new Row([new Entry("hello"), new Entry("mum")]);
+    const bodyRow = new Row([new Entry("wotcher"), new Entry("Mate")]);
+
+    const table = new Table(
+        [new TGroup(
+            colspecs,
+            false,
+            [
+                headRow,
+                bodyRow
+            ]
+        )]
+    );
+
+    return table;
+}
+
+export function tableHelper( widths: number[], entries: string[][]){
+    const colspecs = widths.map( (wid) => { return new ColSpec( wid); } );
+    const rows =entries.map( (row) => {
+        return new Row( row.map( (e) => { return new Entry(e); }));
+    });
+    return new Table( [new TGroup( colspecs, false, rows )]);
+
+}
+
+// fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
+export function toGrid( input:Table ): string {
+    const columns = input.tgroup[0].colspecs;
+    const headPlate = columns.map( (spec) =>{ return ''.padStart(parseInt( spec.colwidth ),'-');}).join('+');
+
+
+    return headPlate;
+
 }
