@@ -152,12 +152,19 @@ export function tableHelper( widths: number[], entries: string[][]){
 
 }
 
-// fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
+// Given a cals table, write it as an RST gridtable
 export function toGrid( input:Table ): string {
-    const columns = input.tgroup[0].colspecs;
-    const headPlate = columns.map( (spec) =>{ return ''.padStart(parseInt( spec.colwidth ),'-');}).join('+');
+    const colspecs = input.tgroup[0].colspecs;
+    const colwidths = colspecs.map((spec) => {return parseInt(spec.colwidth);});
 
+    const headPlate = '+' + (colwidths.map( (w) => { return ''.padStart(w + 2,'-');}).join('+')) + '+';
 
-    return headPlate;
-
+    let lines = [headPlate];
+    const rows = input.tgroup[0].tbody.row.map( (row: Row) => {
+        return row.entry.map( (entry, i) => {
+            lines.push('| ' + entry.paracon.padEnd(colwidths[i], ' ') + ' |');
+            lines.push(headPlate);
+        });
+    });
+    return lines.join('\n');
 }

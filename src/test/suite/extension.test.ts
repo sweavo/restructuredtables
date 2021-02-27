@@ -38,7 +38,7 @@ suite('CALS lib demonstrations', () => {
 
 		const output = cals.toGrid( table );
 
-		assert.strictEqual( output, '+----+\n| Yo |\n+----+\n');
+		assert.strictEqual( output, '+----+\n| Yo |\n+----+');
 	});
 
 	test('Parse a simple RST gridtable and regenerate it (disabled).', () => {
