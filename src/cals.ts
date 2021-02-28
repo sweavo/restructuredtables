@@ -116,6 +116,9 @@ export class Table{
     };
 }
 
+function isBorder( line: string) : boolean {
+    return line.slice(0,1) === '+';
+}
 
 // fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
 export function fromGrid( input:string ):Table {
@@ -127,10 +130,18 @@ export function fromGrid( input:string ):Table {
 
     // Scoop up the contents
     let cells:string[][] = [];
-
+    let rowIndex=0;
     lines.forEach( (line) => {
-        if (line.substr(0,1) !== "+"){
-            cells.push( line.split('|').slice(1,-1).map((row) => {return row.trim();}) );
+        if (isBorder( line ) ) {
+            cells.push( new Array(widths.length).fill(""));
+            rowIndex = cells.length;
+        }
+        else
+        {
+            line.split('|').slice(1,-1).forEach( (cellLine,i) => {
+                cells[rowIndex][i]+= "\n" + cellLine;
+                console.log('append: ' + cellLine + ' => ' + cells[rowIndex][i]);
+            });
         }
     });
 
