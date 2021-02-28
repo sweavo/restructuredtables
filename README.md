@@ -12,11 +12,19 @@ This extension aims to make it much easier to edit grid tables by parsing the ta
 
 ## Backlog
 
-- Allow more alignment options such that numbers can be right-aligned
-- Parse a table where a cell runs to multiple lines
-- Render a table where a cell runs to multiple lines
-- Add screenshots or animations to the docs
-- Read the [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+
+- `[001]` read a table into a string
+- `[002]` parse a grid table into an array of cells + some metadata (use CALS as the inspiration)
+- `[003]` gridtable parsing to handle when the cells are multiline
+- `[004]` gridtable parsing to handle when the table is indented
+- `[005]` gridtable parsing to handle when the columns are not correctly aligned 
+- `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
+- `[007]` investigate: in a table, hit a key to reformat to some flat view; hit it again to reconstitue the table.
+- `[008]` Allow more alignment options such that numbers can be right-aligned
+- `[009]` Parse a table where a cell runs to multiple lines
+- `[010]` Render a table where a cell runs to multiple lines
+- `[011]` Add screenshots or animations to the docs
+- `[012]` Read the [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
 
 ## Requirements
 
