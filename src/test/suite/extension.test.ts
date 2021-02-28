@@ -90,5 +90,40 @@ suite('CALS lib demonstrations', () => {
 
 	});
 
+    test('Render an RST gridtable with multiline cells of different numbers of lines.', () => {
+        const expected = `+---+---+---+
+| A | B | C |
++---+---+---+
+| 0 | 0 |   |
+| 0 |   | x |
+| 1 |   |   |
+| 1 |   |   |
++---+---+---+`;
+
+        const table = cals.tableHelper([1,1,1], [['A','B','C'],['0\n0\n1\n1', '0','\nx']]);
+
+        const output = cals.toGrid( table );
+
+        assert.strictEqual(output, expected);
+
+    });
+
+	test('Parse and re-render an RST gridtable with multiline cells of different numbers of lines.', () => {
+        const input = `+---+---+---+
+| A | B | C |
++---+---+---+
+| 0 | 0 |   |
+| 0 |   | x |
+| 1 |   |   |
+| 1 |   |   |
++---+---+---+`;
+
+        const table = cals.fromGrid(input);
+
+        const output = cals.toGrid( table );
+
+        assert.strictEqual(output, input);
+
+    });
 
 });
