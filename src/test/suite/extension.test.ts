@@ -90,7 +90,7 @@ suite('CALS lib demonstrations', () => {
 
 	});
 
-    test('Parse an RST gridtable with multiline cells and re-render.', () => {
+    test('Render an RST gridtable with multiline cells of different numbers of lines.', () => {
         const expected = `+---+---+---+
 | A | B | C |
 +---+---+---+

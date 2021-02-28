@@ -170,11 +170,27 @@ export function toGrid( input:Table ): string {
     const headPlate = '+' + (colwidths.map( (w) => { return ''.padStart(w + 2,'-');}).join('+')) + '+';
 
     let lines = [headPlate];
-    const rows = input.tgroup[0].tbody.row.map( (row: Row) => {
-        
-        lines.push( '| ' + row.entry.map( (entry, i) => {
-            return entry.paracon.padEnd(colwidths[i], ' ');
-        }).join(' | ') + ' |');
+    input.tgroup[0].tbody.row.map( (row: Row) => {
+        // Each of the cells is to be held as an array of lines.
+        const paracons = row.entry.map( (entry) => {
+            return entry.paracon.split('\n');
+        });
+        // how many rows do we have to consider?
+        const extent = Math.max(... paracons.map( (s) => s.length ));
+
+        for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
+            const cellLines = paracons.map( (pc) => {
+                if (textLineIndex < pc.length) { 
+                    return pc[textLineIndex];
+                } else {
+                    return "";
+                }
+            });
+            lines.push( '| ' + cellLines.map( (cellLine, colIndex) => {
+                return cellLine.padEnd(colwidths[colIndex], ' ');
+            }).join(' | ') + ' |');
+
+        }
         lines.push(headPlate);
     });
     return lines.join('\n');
