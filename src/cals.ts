@@ -167,17 +167,20 @@ export function toGrid( input:Table ): string {
     const colspecs = input.tgroup[0].colspecs;
     const colwidths = colspecs.map((spec) => {return parseInt(spec.colwidth);});
 
+    // Prefab this line, which will be re-used a bunch.
     const headPlate = '+' + (colwidths.map( (w) => { return ''.padStart(w + 2,'-');}).join('+')) + '+';
 
+    // Accumulator
     let lines = [headPlate];
+
+    // Go through the rows. For each we will find the lines within the cells of that row
     input.tgroup[0].tbody.row.map( (row: Row) => {
-        // Each of the cells is to be held as an array of lines.
-        const paracons = row.entry.map( (entry) => {
-            return entry.paracon.split('\n');
-        });
-        // how many rows do we have to consider?
+
+        // Each of the cells is to be held as an array of lines. Hold on to the length of the longest.
+        const paracons = row.entry.map( (entry) => entry.paracon.split('\n') );
         const extent = Math.max(... paracons.map( (s) => s.length ));
 
+        // Now loop long enough for the longest list of cell lines, rendering the grid with text in cells.
         for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
             const cellLines = paracons.map( (pc) => {
                 if (textLineIndex < pc.length) { 
@@ -191,7 +194,10 @@ export function toGrid( input:Table ): string {
             }).join(' | ') + ' |');
 
         }
+
+        // finish with a horizontal rule
         lines.push(headPlate);
     });
+
     return lines.join('\n');
 }
