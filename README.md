@@ -22,6 +22,7 @@ Grooming: 009 is a dup of 003: Removed.  Reordered BL and added a bunch of revel
 
 To test this I will use tableHelper so that the input can have different numbers of lines in cells along the same row.
 
+It's working.  Now also a round-trip test to show that the grid does not drift when de- and re-encoded.
 
 ## Backlog
 

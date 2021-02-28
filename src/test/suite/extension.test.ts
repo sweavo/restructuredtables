@@ -107,4 +107,23 @@ suite('CALS lib demonstrations', () => {
         assert.strictEqual(output, expected);
 
     });
+
+	test('Parse and re-render an RST gridtable with multiline cells of different numbers of lines.', () => {
+        const input = `+---+---+---+
+| A | B | C |
++---+---+---+
+| 0 | 0 |   |
+| 0 |   | x |
+| 1 |   |   |
+| 1 |   |   |
++---+---+---+`;
+
+        const table = cals.fromGrid(input);
+
+        const output = cals.toGrid( table );
+
+        assert.strictEqual(output, input);
+
+    });
+
 });
