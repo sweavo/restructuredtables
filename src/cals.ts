@@ -131,17 +131,19 @@ export function fromGrid( input:string ):Table {
     // Scoop up the contents
     let cells:string[][] = [];
     let rowIndex=0;
-    lines.forEach( (line) => {
+    let sep='';
+    lines.slice(0,-1).forEach( (line) => {
         if (isBorder( line ) ) {
             cells.push( new Array(widths.length).fill(""));
-            rowIndex = cells.length;
+            rowIndex = cells.length-1;
+            sep='';
         }
         else
         {
             line.split('|').slice(1,-1).forEach( (cellLine,i) => {
-                cells[rowIndex][i]+= "\n" + cellLine;
-                console.log('append: ' + cellLine + ' => ' + cells[rowIndex][i]);
+                cells[rowIndex][i]+= sep + cellLine.slice(1,-1);
             });
+            sep = '\n';
         }
     });
 
