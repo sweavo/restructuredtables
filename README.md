@@ -18,11 +18,13 @@ Grooming: 009 is a dup of 003: Removed.  Reordered BL and added a bunch of revel
 
 - `[003]` gridtable parsing to handle when the cells are multiline
 
+- `[010]` Render a table where a cell runs to multiple lines
+
+To test this I will use tableHelper so that the input can have different numbers of lines in cells along the same row.
 
 
 ## Backlog
 
-- `[010]` Render a table where a cell runs to multiple lines
 - `[004]` gridtable parsing to handle when the table is indented
 - `[018]` Read about headings in gridtables and see how to incorporate in CALS
 - `[019]` how should CALS represent column width in characters?
