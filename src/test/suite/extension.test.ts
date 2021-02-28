@@ -52,7 +52,7 @@ suite('CALS lib demonstrations', () => {
 
 	});
 
-	test('Parse a simple RST gridtable and regenerate it (disabled).', () => {
+	test('Parse a simple RST gridtable and regenerate it.', () => {
 		const input = `+---+---+-----+
 | A | B | Out |
 +---+---+-----+

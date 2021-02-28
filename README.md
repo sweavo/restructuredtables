@@ -10,21 +10,32 @@ This extension aims to make it much easier to edit grid tables by parsing the ta
 
 2021-02-28: No features yet.  There are some basic tests for the `cals.toGrid` function.  Next might be to implement some tests for that `cals.fromGrid` function.
 
+- `[002]` parse a grid table into an array of cells + some metadata (use CALS as the inspiration)
+
+This is done to the smallest possible meaning of done.  I already have separate backlog items for multiline cell contents, and colspan and rowspan are not part of the MVP. 
+
+Grooming: 009 is a dup of 003: Removed.  Reordered BL and added a bunch of revelations about pipe symbols and missing knowledge.
+
 ## Backlog
 
-
-- `[001]` read a table into a string
-- `[002]` parse a grid table into an array of cells + some metadata (use CALS as the inspiration)
 - `[003]` gridtable parsing to handle when the cells are multiline
+- `[010]` Render a table where a cell runs to multiple lines
 - `[004]` gridtable parsing to handle when the table is indented
-- `[005]` gridtable parsing to handle when the columns are not correctly aligned 
+- `[018]` Read about headings in gridtables and see how to incorporate in CALS
+- `[019]` how should CALS represent column width in characters?
+- `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.
+- `[001]` read a table into a string from the document
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[007]` investigate: in a table, hit a key to reformat to some flat view; hit it again to reconstitue the table.
 - `[008]` Allow more alignment options such that numbers can be right-aligned
-- `[009]` Parse a table where a cell runs to multiple lines
-- `[010]` Render a table where a cell runs to multiple lines
 - `[011]` Add screenshots or animations to the docs
 - `[012]` Read the [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+- `[005]` gridtable parsing to handle when the columns are not correctly aligned: 2021-02-28: at this time the alignment has no bearing on the parsing of the gridtable.  This means there will be bugs (raised as [013] and [014]) when pipe symbols appear other than in the correct columns.
+- `[013]` handle when a pipe symbol is present in a table cell
+- `[014]` gridtable to allow basic colspan without breaking [005]
+- `[015]` use the existing line lengths in a column to work out the column's ideal width, including multiline entries.
+- `[016]` EPIC allow the cell contents to be reflowed by parsing them as RST.
+- `[017]` EPIC given [016], use the volume of text in columns to come up with the column widths.
 
 ## Requirements
 
