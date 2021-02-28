@@ -16,9 +16,12 @@ This is done to the smallest possible meaning of done.  I already have separate 
 
 Grooming: 009 is a dup of 003: Removed.  Reordered BL and added a bunch of revelations about pipe symbols and missing knowledge.
 
+- `[003]` gridtable parsing to handle when the cells are multiline
+
+
+
 ## Backlog
 
-- `[003]` gridtable parsing to handle when the cells are multiline
 - `[010]` Render a table where a cell runs to multiple lines
 - `[004]` gridtable parsing to handle when the table is indented
 - `[018]` Read about headings in gridtables and see how to incorporate in CALS

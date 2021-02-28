@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
@@ -17,14 +18,14 @@ suite('CALS lib demonstrations', () => {
 		const tgroup = new cals.TGroup( [col], false, [row]);
 		const table = new cals.Table( [ tgroup ]);
 
-		assert.strictEqual('Hello, Mum!', table.tgroup[0].tbody.row[0].entry[0].paracon );		
-		assert.strictEqual(true, table.isValid());
+		assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon, 'Hello, Mum!');
+		assert.strictEqual(table.isValid(), true);
 	});
 	test ('A table needs one tgroups',() => {
 		
 		const table = new cals.Table([]);
 
-		assert.strictEqual(false, table.isValid());
+		assert.strictEqual(table.isValid(), false);
 
 	});
 	test ('toGrid: write a 1x1 grid', () => {	
@@ -69,7 +70,25 @@ suite('CALS lib demonstrations', () => {
 
 		const output = cals.toGrid( table );
 
-		assert.strictEqual( input, output );
+		assert.strictEqual(output, input);
 
 	});
+
+	test('Parse an RST gridtable with multiline cells.', () => {
+		const input = `+---+---+---+
+| A | B | C |
++---+---+---+
+| 0 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 0 | 0 |
+| 1 | 1 | 1 |
++---+---+---+`;
+
+		const table = cals.fromGrid( input );
+
+		assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon, '0\n0\n1\n1');
+
+	});
+
+
 });

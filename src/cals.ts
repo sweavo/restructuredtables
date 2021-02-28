@@ -116,6 +116,9 @@ export class Table{
     };
 }
 
+function isBorder( line: string) : boolean {
+    return line.slice(0,1) === '+';
+}
 
 // fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
 export function fromGrid( input:string ):Table {
@@ -125,18 +128,31 @@ export function fromGrid( input:string ):Table {
     const columnStrings =  lines[0].split('+').slice(1,-1);
     const widths = columnStrings.map( (st) => { return  st.length - 2; });
 
-    // Scoop up the contents
+    // Scoop up the contents.
     let cells:string[][] = [];
-
-    lines.forEach( (line) => {
-        if (line.substr(0,1) !== "+"){
-            cells.push( line.split('|').slice(1,-1).map((row) => {return row.trim();}) );
+    let rowIndex=0;
+    let sep='';
+    lines.slice(0,-1).forEach( (line) => {
+        if (isBorder( line ) ) { 
+            // Start a new set of cell buffers.
+            cells.push( new Array(widths.length).fill(""));
+            rowIndex = cells.length-1;
+            sep='';
+        }
+        else
+        {
+            // Append a line to each of the cell buffers.
+            line.split('|').slice(1,-1).forEach( (cellLine,i) => {
+                cells[rowIndex][i]+= sep + cellLine.slice(1,-1);
+            });
+            sep = '\n';
         }
     });
 
     return tableHelper( widths, cells );
 }
 
+// Shortcut to a cals table from a couple of JS arrays
 export function tableHelper( widths: number[], entries: string[][]){
     const colspecs = widths.map( (wid) => { return new ColSpec( wid); } );
     const rows =entries.map( (row) => {
