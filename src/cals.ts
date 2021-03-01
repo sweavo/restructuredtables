@@ -169,9 +169,43 @@ export function toGrid( input:Table ): string {
 
     // Prefab this line, which will be re-used a bunch.
     const headPlate = '+' + (colwidths.map( (w) => { return ''.padStart(w + 2,'-');}).join('+')) + '+';
+    const headSeparator = '+' + (colwidths.map( (w) => { return ''.padStart(w + 2,'=');}).join('+')) + '+';
 
     // Accumulator
-    let lines = [headPlate];
+    let lines = [];
+
+    // Heading rows, if any
+    if (input.tgroup[0].thead !== undefined) {
+        input.tgroup[0].thead.row.map( (row: Row) => {
+
+            lines.push(headPlate);
+
+            // Each of the cells is to be held as an array of lines. Hold on to the length of the longest.
+            const paracons = row.entry.map( (entry) => entry.paracon.split('\n') );
+            const extent = Math.max(... paracons.map( (s) => s.length ));
+    
+            // Now loop long enough for the longest list of cell lines, rendering the grid with text in cells.
+            for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
+                const cellLines = paracons.map( (pc) => {
+                    if (textLineIndex < pc.length) { 
+                        return pc[textLineIndex];
+                    } else {
+                        return "";
+                    }
+                });
+                lines.push( '| ' + cellLines.map( (cellLine, colIndex) => {
+                    return cellLine.padEnd(colwidths[colIndex], ' ');
+                }).join(' | ') + ' |');
+            }
+        });
+        
+        // horizontal double-rule signifying end of header
+        lines.push(headSeparator);
+
+    } else {
+        // horizontal single rule signifying start of table
+        lines.push(headPlate);
+    }
 
     // Go through the rows. For each we will find the lines within the cells of that row
     input.tgroup[0].tbody.row.map( (row: Row) => {
@@ -192,10 +226,7 @@ export function toGrid( input:Table ): string {
             lines.push( '| ' + cellLines.map( (cellLine, colIndex) => {
                 return cellLine.padEnd(colwidths[colIndex], ' ');
             }).join(' | ') + ' |');
-
         }
-
-        // finish with a horizontal rule
         lines.push(headPlate);
     });
 
