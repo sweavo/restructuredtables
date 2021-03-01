@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
+import { execPath } from 'process';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
@@ -22,33 +23,33 @@ suite('CALS lib demonstrations', () => {
 		assert.strictEqual(table.isValid(), true);
 	});
 	test ('A table needs one tgroups',() => {
-		
+
 		const table = new cals.Table([]);
 
 		assert.strictEqual(table.isValid(), false);
 
 	});
-	test ('toGrid: write a 1x1 grid', () => {	
-		
+	test ('toGrid: write a 1x1 grid', () => {
+
 		const output = cals.toGrid( cals.tableHelper([2],[['Yo']]) );
-		
+
 		assert.strictEqual( output, '+----+\n| Yo |\n+----+');
 
 	});
 
-	test ('toGrid: write one two-column row', () => {	
-		
+	test ('toGrid: write one two-column row', () => {
+
 		const output = cals.toGrid( cals.tableHelper([2,5],[['Yo', 'There']]) );
-		
+
 		assert.strictEqual( output, '+----+-------+\n| Yo | There |\n+----+-------+');
 
 	});
 
-	test ('toGrid: write two two-column rows', () => {	
-		
+	test ('toGrid: write two two-column rows', () => {
+
 		const output = cals.toGrid( cals.tableHelper([2,5],[['Yo', 'There'],
 															['Hi', 'Matey']]) );
-		
+
 		assert.strictEqual( output, '+----+-------+\n| Yo | There |\n+----+-------+\n| Hi | Matey |\n+----+-------+');
 
 	});
@@ -125,5 +126,28 @@ suite('CALS lib demonstrations', () => {
         assert.strictEqual(output, input);
 
     });
+
+	test('`[024]` in toGrid, render heading rows followed by a = border.]', () => {
+		let table = cals.tableHelper([5,5,5], [["1","2","3"],["4","5","6"]]);
+
+
+		table.tgroup[0].thead = new cals.THead([
+			new cals.Row(
+				['A','B','C' ].map( (e) => {return new cals.Entry(e); } )
+			)
+		]);
+
+		const expected = `+-------+-------+-------+
+| A     | B     | C     |
++=======+=======+=======+
+| 1     | 2     | 3     |
++-------+-------+-------+
+| 4     | 5     | 6     |
++-------+-------+-------+`;
+
+		const output = cals.toGrid( table );
+
+		assert.strictEqual(output, expected);
+	});
 
 });
