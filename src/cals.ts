@@ -162,6 +162,26 @@ export function tableHelper( widths: number[], entries: string[][]){
 
 }
 
+function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=>void ) {
+    // Each of the cells is to be held as an array of lines. Hold on to the length of the longest.
+    const paracons = row.entry.map( (entry) => entry.paracon.split('\n') );
+    const extent = Math.max(... paracons.map( (s) => s.length ));
+
+    // Now loop long enough for the longest list of cell lines, rendering the grid with text in cells.
+    for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
+        const cellLines = paracons.map( (pc) => {
+            if (textLineIndex < pc.length) { 
+                return pc[textLineIndex];
+            } else {
+                return "";
+            }
+        });
+        callback( '| ' + cellLines.map( (cellLine, colIndex) => {
+            return cellLine.padEnd(colwidths[colIndex], ' ');
+        }).join(' | ') + ' |');
+    }
+    
+}
 // Given a cals table, write it as an RST gridtable
 export function toGrid( input:Table ): string {
     const colspecs = input.tgroup[0].colspecs;
@@ -180,23 +200,7 @@ export function toGrid( input:Table ): string {
 
             lines.push(headPlate);
 
-            // Each of the cells is to be held as an array of lines. Hold on to the length of the longest.
-            const paracons = row.entry.map( (entry) => entry.paracon.split('\n') );
-            const extent = Math.max(... paracons.map( (s) => s.length ));
-    
-            // Now loop long enough for the longest list of cell lines, rendering the grid with text in cells.
-            for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
-                const cellLines = paracons.map( (pc) => {
-                    if (textLineIndex < pc.length) { 
-                        return pc[textLineIndex];
-                    } else {
-                        return "";
-                    }
-                });
-                lines.push( '| ' + cellLines.map( (cellLine, colIndex) => {
-                    return cellLine.padEnd(colwidths[colIndex], ' ');
-                }).join(' | ') + ' |');
-            }
+            writeRowMultiline( colwidths, row, (line) => lines.push(line) );
         });
         
         // horizontal double-rule signifying end of header
