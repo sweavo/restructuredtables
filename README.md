@@ -8,7 +8,9 @@ This extension aims to make it much easier to edit grid tables by parsing the ta
 
 ## Features
 
-2021-02-28: No features yet.  There are some basic tests for the `cals.toGrid` function.  Next might be to implement some tests for that `cals.fromGrid` function.
+### 2021-02-28
+
+No features yet.  There are some basic tests for the `cals.toGrid` function.  Next might be to implement some tests for that `cals.fromGrid` function.
 
 - `[002]` parse a grid table into an array of cells + some metadata (use CALS as the inspiration)
 
@@ -24,10 +26,24 @@ To test this I will use tableHelper so that the input can have different numbers
 
 It's working.  Now also a round-trip test to show that the grid does not drift when de- and re-encoded.
 
-## Backlog
+### 2021-03-01
 
-- `[004]` gridtable parsing to handle when the table is indented
 - `[018]` Read about headings in gridtables and see how to incorporate in CALS
+
+https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#tables
+
+Notes: (1) restructuredText seems to use CALS internally for its table representation.  (2) "emacs table mode" might provide some inspiration about the operations to be performed on a table.
+
+Each cell is a miniature document, suggesting that I'll have to do something very clever to support reflowing. Actually, if we can insist that the left and right text columns within the table cell are blank, then the first encounter of - or = is the end of the imprisoned document.  Similarly, if the top or the bottom of the cell are a given width, then that sets the width (and possibly span) of the cell, and we don't have to worry about detecting internal | characters.  Actually we dont have to worry about that until we are doing colspans.
+
+Headings are denoted by having multiple rows above a border written with = characters.
+s
+## Backlog
+_(next:025)_
+
+- `[023]` in fromGrid, treat rows above a = border as heading rows.
+- `[024]` in toGrid, render heading rows followed by a = border.
+- `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.
 - `[001]` read a table into a string from the document
@@ -42,6 +58,8 @@ It's working.  Now also a round-trip test to show that the grid does not drift w
 - `[015]` use the existing line lengths in a column to work out the column's ideal width, including multiline entries.
 - `[016]` EPIC allow the cell contents to be reflowed by parsing them as RST.
 - `[017]` EPIC given [016], use the volume of text in columns to come up with the column widths.
+- `[022]` when reflowing a cell that contains | characters, avoid putting them directly below a +. (Defer until colspan)
+- `[021]` read up on pandoc support for CALS tables: there will be no point in supporting certain features.
 
 ## Requirements
 
