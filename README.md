@@ -34,11 +34,15 @@ https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#tables
 
 Notes: (1) restructuredText seems to use CALS internally for its table representation.  (2) "emacs table mode" might provide some inspiration about the operations to be performed on a table.
 
-Each cell is a miniature document, suggesting that I'll have to do something very clever to support reflowing. Actually, if we can insist that the left and right text columns within the table cell are blank, then the first encounter of - or = is the end of the imprisoned document.  Similarly, if the top or the bottom of the cell are a given width, then that sets the width (and possibly span) of the cell, and we don't have to worry about detecting internal | characters.  ACtually we dont have to worry about that until we are doing colspans.
+Each cell is a miniature document, suggesting that I'll have to do something very clever to support reflowing. Actually, if we can insist that the left and right text columns within the table cell are blank, then the first encounter of - or = is the end of the imprisoned document.  Similarly, if the top or the bottom of the cell are a given width, then that sets the width (and possibly span) of the cell, and we don't have to worry about detecting internal | characters.  Actually we dont have to worry about that until we are doing colspans.
 
+Headings are denoted by having multiple rows above a border written with = characters.
+s
 ## Backlog
-_(next:023)_
+_(next:025)_
 
+- `[023]` in fromGrid, treat rows above a = border as heading rows.
+- `[024]` in toGrid, render heading rows followed by a = border.
 - `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.
