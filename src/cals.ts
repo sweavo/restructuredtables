@@ -163,22 +163,20 @@ export function tableHelper( widths: number[], entries: string[][]){
 }
 
 function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=>void ) {
-    // Each of the cells is to be held as an array of lines. Hold on to the length of the longest.
-    const paracons = row.entry.map( (entry) => entry.paracon.split('\n') );
-    const extent = Math.max(... paracons.map( (s) => s.length ));
+    
+    // Each of the cells' paracons is to be held as an array of lines.
+    const paraconLineArrays = row.entry.map( (entry) => entry.paracon.split('\n') );
+    
+    //Hold on to the length of the longest.
+    const extent = Math.max(... paraconLineArrays.map( (s) => s.length ));
 
     // Now loop long enough for the longest list of cell lines, rendering the grid with text in cells.
     for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
-        const cellLines = paracons.map( (pc) => {
-            if (textLineIndex < pc.length) { 
-                return pc[textLineIndex];
-            } else {
-                return "";
-            }
-        });
-        callback( '| ' + cellLines.map( (cellLine, colIndex) => {
-            return cellLine.padEnd(colwidths[colIndex], ' ');
-        }).join(' | ') + ' |');
+        // Take the ith line of each entry in the row, or "" where there is no ith line
+        const cellLines = paraconLineArrays.map( (pc) => (textLineIndex < pc.length) ? pc[textLineIndex] : "" );
+        
+        const  innerText = cellLines.map( (cellLine, colIndex) => cellLine.padEnd(colwidths[colIndex], ' ')).join(' | ');
+        callback( '| ' + innerText + ' |');
     }
     
 }
