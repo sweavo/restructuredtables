@@ -47,8 +47,9 @@ s
 
 
 ## Backlog
-_(next:025)_
+_(next:026)_
 
+_ `[025]` split out cals.ts into datamodel and conversion functions
 - `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.
