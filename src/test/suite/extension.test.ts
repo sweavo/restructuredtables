@@ -150,4 +150,22 @@ suite('CALS lib demonstrations', () => {
 		assert.strictEqual(output, expected);
 	});
 
+	test('`[023]` in fromGrid, treat rows above a = border as heading rows.', () => {
+		const input = `+-------+-------+-------+
+| 1     | 2     | 3     |
++-------+-------+-------+
+| A     | B     | C     |
++=======+=======+=======+
+| 1     | 2     | 3     |
++-------+-------+-------+
+| 4     | 5     | 6     |
++-------+-------+-------+`;
+
+		const table = cals.fromGrid(input);
+
+		assert.strictEqual(table.tgroup[0].thead?.row.length,2);
+		assert.strictEqual(table.tgroup[0].thead?.row[1].entry[2].paracon,'C');
+
+	});
+
 });

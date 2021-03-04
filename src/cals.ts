@@ -1,9 +1,9 @@
-/* 
+/*
     TypeScript types for handling Exchange-CALS tables.
 
-    This internal representation of tables supports more use-cases than pandoc's iomplementation of 
-    restructuredText tables.  The aim here is to represent everything that can be expressed in the 
-    two built-in table types of restructuredText. Translation to and from text is left to encoders 
+    This internal representation of tables supports more use-cases than pandoc's iomplementation of
+    restructuredText tables.  The aim here is to represent everything that can be expressed in the
+    two built-in table types of restructuredText. Translation to and from text is left to encoders
     and decoders respectively.
 */
 
@@ -37,7 +37,7 @@ export class Entry {
 export class Row {
     constructor (entries: Entry[]) {
         this.entry = entries;
-    };    
+    };
     rowsep?: boolean;
     valign?: CalsVAlign;
     entry: Entry[];
@@ -101,7 +101,7 @@ export class TGroup {
 // One logical table, which may span several pages or minipages, each with its own tgroup.
 export class Table{
     // omitted: stuff relating to titles and frame?!
-    public  pgwide: boolean = false; 
+    public  pgwide: boolean = false;
     public tgroup: TGroup[] = [];
 
     constructor ( tgroup: TGroup[] ) {
@@ -133,7 +133,7 @@ export function fromGrid( input:string ):Table {
     let rowIndex=0;
     let sep='';
     lines.slice(0,-1).forEach( (line) => {
-        if (isBorder( line ) ) { 
+        if (isBorder( line ) ) {
             // Start a new set of cell buffers.
             cells.push( new Array(widths.length).fill(""));
             rowIndex = cells.length-1;
@@ -163,10 +163,10 @@ export function tableHelper( widths: number[], entries: string[][]){
 }
 
 function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=>void ) {
-    
+
     // Each of the cells' paracons is to be held as an array of lines.
     const paraconLineArrays = row.entry.map( (entry) => entry.paracon.split('\n') );
-    
+
     //Hold on to the length of the longest.
     const extent = Math.max(... paraconLineArrays.map( (s) => s.length ));
 
@@ -174,11 +174,11 @@ function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=
     for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
         // Take the ith line of each entry in the row, or "" where there is no ith line
         const cellLines = paraconLineArrays.map( (pc) => (textLineIndex < pc.length) ? pc[textLineIndex] : "" );
-        
+
         const  innerText = cellLines.map( (cellLine, colIndex) => cellLine.padEnd(colwidths[colIndex], ' ')).join(' | ');
         callback( '| ' + innerText + ' |');
     }
-    
+
 }
 // Given a cals table, write it as an RST gridtable
 export function toGrid( input:Table ): string {
@@ -199,7 +199,7 @@ export function toGrid( input:Table ): string {
             lines.push(headPlate);
             writeRowMultiline( colwidths, row, (line) => lines.push(line) );
         });
-        
+
         // horizontal double-rule signifying end of header
         lines.push(headSeparator);
 
