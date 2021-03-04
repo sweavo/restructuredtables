@@ -165,7 +165,8 @@ suite('CALS lib demonstrations', () => {
 
 		assert.strictEqual(table.tgroup[0].thead?.row.length,2);
 		assert.strictEqual(table.tgroup[0].thead?.row[1].entry[2].paracon,'C');
-
+		assert.strictEqual(table.tgroup[0].tbody.row.length,2);
+		assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0],'1');
 	});
 
 });
