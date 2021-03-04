@@ -90,7 +90,7 @@ export class TGroup {
         this.cols = this.colspecs.length;
         if (headRows > 0 ){
             this.thead=new THead(rows=rows.slice(0,headRows));
-            this.tbody=new TBody(rows=rows.slice(headRows));
+            this.tbody=new TBody(rows=rows.slice(headRows, rows.length));
         }else{
             this.thead=undefined;
             this.tbody=new TBody(rows);
