@@ -85,12 +85,12 @@ export class TGroup {
     colspecs: ColSpec[];
     thead?: THead; // 0..1
     tbody: TBody;
-    constructor ( colspecs: ColSpec[], hasHead: boolean, rows: Row[]){
+    constructor ( colspecs: ColSpec[], headRows: number, rows: Row[]){
         this.colspecs = colspecs;
         this.cols = this.colspecs.length;
-        if (hasHead){
-            this.thead=new THead(rows=[rows[0]]);
-            this.tbody=new TBody(rows=rows.slice(1));
+        if (headRows > 0 ){
+            this.thead=new THead(rows=rows.slice(0,headRows));
+            this.tbody=new TBody(rows=rows.slice(headRows));
         }else{
             this.thead=undefined;
             this.tbody=new TBody(rows);
@@ -119,25 +119,32 @@ export class Table{
 function isBorder( line: string) : boolean {
     return line.slice(0,1) === '+';
 }
+function isHeaderEnd( line: string) : boolean {
+    return line.slice(0,2) === '+=';
+}
 
 // fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
 export function fromGrid( input:string ):Table {
     const lines = input.split('\n');
 
     // Use the first line to describe the columns:
-    const columnStrings =  lines[0].split('+').slice(1,-1);
+    const columnStrings = lines[0].split('+').slice(1,-1);
     const widths = columnStrings.map( (st) => { return  st.length - 2; });
 
     // Scoop up the contents.
     let cells:string[][] = [];
-    let rowIndex=0;
-    let sep='';
+    let headerRows = 0;
+    let rowIndex = 0;
+    let sep = '';
     lines.slice(0,-1).forEach( (line) => {
         if (isBorder( line ) ) {
             // Start a new set of cell buffers.
             cells.push( new Array(widths.length).fill(""));
             rowIndex = cells.length-1;
             sep='';
+            if (isHeaderEnd(line)) {
+                headerRows = rowIndex;
+            }
         }
         else
         {
@@ -149,16 +156,16 @@ export function fromGrid( input:string ):Table {
         }
     });
 
-    return tableHelper( widths, cells );
+    return tableHelper( widths, cells, headerRows );
 }
 
 // Shortcut to a cals table from a couple of JS arrays
-export function tableHelper( widths: number[], entries: string[][]){
+export function tableHelper( widths: number[], entries: string[][], headerRows=0 ){
     const colspecs = widths.map( (wid) => { return new ColSpec( wid); } );
     const rows =entries.map( (row) => {
         return new Row( row.map( (e) => { return new Entry(e); }));
     });
-    return new Table( [new TGroup( colspecs, false, rows )]);
+    return new Table( [new TGroup( colspecs, headerRows, rows )]);
 
 }
 
