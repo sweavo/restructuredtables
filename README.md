@@ -60,14 +60,16 @@ The first of these two lines was leaving `rows` with only `headRows` rows, and t
 
 A "refactor" to perform the partitioning of `rows` in a separate function fixed the bug. This is obviously not OK, so I went back and had a look. The answer: named parameters don't work like that in Javascript! In fact, they don't exist; what we use is de-structuring https://stackoverflow.com/a/42108988/11982419.
 
-Fixing this on branch `refactor-after-023`
+Fixing this on branch `refactor-after-023`. Done
+
+- `[026]` in fromgrid, strip trailing whitespace from paracons
+
+Actually, it probably makes sense to strip trailing whitespace from all lines within a cell
 
 ## Backlog
 _(next:027)_
 
-
 - `[025]` split out cals.ts into datamodel and conversion functions
-- `[026]` in fromgrid, strip trailing whitespace from paracons
 - `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.

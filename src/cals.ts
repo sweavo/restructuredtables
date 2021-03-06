@@ -1,15 +1,11 @@
 /*
     TypeScript types for handling Exchange-CALS tables.
 
-    This internal representation of tables supports more use-cases than pandoc's iomplementation of
+    This internal representation of tables supports more use-cases than pandoc's implementation of
     restructuredText tables.  The aim here is to represent everything that can be expressed in the
     two built-in table types of restructuredText. Translation to and from text is left to encoders
     and decoders respectively.
 */
-
-import { debug } from "console";
-import { Recoverable } from "repl";
-import { runInNewContext } from "vm";
 
 // Alignment enums
 export type CalsAlign = "left" | "right" | "center" | "justify" | "char";
@@ -98,13 +94,10 @@ export class TGroup {
         const [tableHeadRows, tableBodyRows] = arrayPartition(rows, headRows);
         this.colspecs = colspecs;
         this.cols = this.colspecs.length;
-        if (headRows > 0 ){
-            this.thead=new THead(tableHeadRows);
-            this.tbody=new TBody(tableBodyRows);
-        }else{
-            this.thead=undefined;
-            this.tbody=new TBody(tableBodyRows);
-        }
+
+        // rather than containing zero rows, thead is completely undefined if there is no header
+        this.thead=headRows?new THead(tableHeadRows):undefined;
+        this.tbody=new TBody(tableBodyRows);
     }
 }
 
