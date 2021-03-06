@@ -45,6 +45,20 @@ s
 
 - `[023]` in fromGrid, treat rows above a = border as heading rows.
 
+Discovered that when a grid cell is wider than the line that it contains, you get all the spaces in the output.  Raised 026.
+
+Problem with the splitting of the array
+
+### 2021-03-06
+
+Something was going wrong here:
+
+    this.thead=new THead(rows=rows.slice(0,headRows));
+    this.tbody=new TBody(rows=rows.slice(headRows, rows.length));
+
+The first of these two lines was leaving `rows` with only `headRows` rows, and then the second line was resulting in zero rows, presumably because `rows.length == headRows` by then.
+
+A "refactor" to perform the partitioning of `rows` in a separate function fixed the bug.
 
 ## Backlog
 _(next:027)_
