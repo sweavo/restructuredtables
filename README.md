@@ -41,12 +41,17 @@ s
 
 - `[024]` in toGrid, render heading rows followed by a = border.
 
+### 2021-03-04
+
+- `[023]` in fromGrid, treat rows above a = border as heading rows.
 
 
 ## Backlog
-_(next:025)_
+_(next:027)_
 
-- `[023]` in fromGrid, treat rows above a = border as heading rows.
+
+- `[025]` split out cals.ts into datamodel and conversion functions
+- `[026]` in fromgrid, strip trailing whitespace from paracons
 - `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.

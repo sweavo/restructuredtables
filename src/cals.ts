@@ -1,9 +1,9 @@
-/* 
+/*
     TypeScript types for handling Exchange-CALS tables.
 
-    This internal representation of tables supports more use-cases than pandoc's iomplementation of 
-    restructuredText tables.  The aim here is to represent everything that can be expressed in the 
-    two built-in table types of restructuredText. Translation to and from text is left to encoders 
+    This internal representation of tables supports more use-cases than pandoc's iomplementation of
+    restructuredText tables.  The aim here is to represent everything that can be expressed in the
+    two built-in table types of restructuredText. Translation to and from text is left to encoders
     and decoders respectively.
 */
 
@@ -37,7 +37,7 @@ export class Entry {
 export class Row {
     constructor (entries: Entry[]) {
         this.entry = entries;
-    };    
+    };
     rowsep?: boolean;
     valign?: CalsVAlign;
     entry: Entry[];
@@ -76,6 +76,14 @@ export class ColSpec {
     charoff?: string;
 }
 
+// TODO move to utility module
+function arrayPartition(inputArray: any[], splitIndex:number): any[][] {
+    const length = inputArray.length;
+    const first = inputArray.slice(0, splitIndex);
+    const second = inputArray.slice(splitIndex,length);
+    return [first, second];
+}
+
 // TGroup: one uninterrupted layout of a subsection of the table, e.g. one pageful.
 export class TGroup {
     cols: number;
@@ -85,15 +93,17 @@ export class TGroup {
     colspecs: ColSpec[];
     thead?: THead; // 0..1
     tbody: TBody;
-    constructor ( colspecs: ColSpec[], hasHead: boolean, rows: Row[]){
+    
+    constructor ( colspecs: ColSpec[], headRows: number, rows: Row[]){
+        const [tableHeadRows, tableBodyRows] = arrayPartition(rows, headRows);
         this.colspecs = colspecs;
         this.cols = this.colspecs.length;
-        if (hasHead){
-            this.thead=new THead(rows=[rows[0]]);
-            this.tbody=new TBody(rows=rows.slice(1));
+        if (headRows > 0 ){
+            this.thead=new THead(rows=tableHeadRows);
+            this.tbody=new TBody(rows=tableBodyRows);
         }else{
             this.thead=undefined;
-            this.tbody=new TBody(rows);
+            this.tbody=new TBody(tableBodyRows);
         }
     }
 }
@@ -101,7 +111,7 @@ export class TGroup {
 // One logical table, which may span several pages or minipages, each with its own tgroup.
 export class Table{
     // omitted: stuff relating to titles and frame?!
-    public  pgwide: boolean = false; 
+    public  pgwide: boolean = false;
     public tgroup: TGroup[] = [];
 
     constructor ( tgroup: TGroup[] ) {
@@ -119,25 +129,32 @@ export class Table{
 function isBorder( line: string) : boolean {
     return line.slice(0,1) === '+';
 }
+function isHeaderEnd( line: string) : boolean {
+    return line.slice(0,2) === '+=';
+}
 
 // fromGrid reads a restructuredText gridtable and turns it into a CALS structure.
 export function fromGrid( input:string ):Table {
     const lines = input.split('\n');
 
     // Use the first line to describe the columns:
-    const columnStrings =  lines[0].split('+').slice(1,-1);
+    const columnStrings = lines[0].split('+').slice(1,-1);
     const widths = columnStrings.map( (st) => { return  st.length - 2; });
 
     // Scoop up the contents.
     let cells:string[][] = [];
-    let rowIndex=0;
-    let sep='';
+    let headerRows = 0;
+    let rowIndex = 0;
+    let sep = '';
     lines.slice(0,-1).forEach( (line) => {
-        if (isBorder( line ) ) { 
+        if (isBorder( line ) ) {
             // Start a new set of cell buffers.
             cells.push( new Array(widths.length).fill(""));
             rowIndex = cells.length-1;
             sep='';
+            if (isHeaderEnd(line)) {
+                headerRows = rowIndex;
+            }
         }
         else
         {
@@ -149,24 +166,24 @@ export function fromGrid( input:string ):Table {
         }
     });
 
-    return tableHelper( widths, cells );
+    return tableHelper( widths, cells, headerRows );
 }
 
 // Shortcut to a cals table from a couple of JS arrays
-export function tableHelper( widths: number[], entries: string[][]){
+export function tableHelper( widths: number[], entries: string[][], headerRows=0 ){
     const colspecs = widths.map( (wid) => { return new ColSpec( wid); } );
     const rows =entries.map( (row) => {
         return new Row( row.map( (e) => { return new Entry(e); }));
     });
-    return new Table( [new TGroup( colspecs, false, rows )]);
+    return new Table( [new TGroup( colspecs, headerRows, rows )]);
 
 }
 
 function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=>void ) {
-    
+
     // Each of the cells' paracons is to be held as an array of lines.
     const paraconLineArrays = row.entry.map( (entry) => entry.paracon.split('\n') );
-    
+
     //Hold on to the length of the longest.
     const extent = Math.max(... paraconLineArrays.map( (s) => s.length ));
 
@@ -174,11 +191,11 @@ function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=
     for (let textLineIndex = 0; textLineIndex<extent; ++textLineIndex) {
         // Take the ith line of each entry in the row, or "" where there is no ith line
         const cellLines = paraconLineArrays.map( (pc) => (textLineIndex < pc.length) ? pc[textLineIndex] : "" );
-        
+
         const  innerText = cellLines.map( (cellLine, colIndex) => cellLine.padEnd(colwidths[colIndex], ' ')).join(' | ');
         callback( '| ' + innerText + ' |');
     }
-    
+
 }
 // Given a cals table, write it as an RST gridtable
 export function toGrid( input:Table ): string {
@@ -199,7 +216,7 @@ export function toGrid( input:Table ): string {
             lines.push(headPlate);
             writeRowMultiline( colwidths, row, (line) => lines.push(line) );
         });
-        
+
         // horizontal double-rule signifying end of header
         lines.push(headSeparator);
 
