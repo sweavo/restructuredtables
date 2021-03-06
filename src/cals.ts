@@ -76,6 +76,14 @@ export class ColSpec {
     charoff?: string;
 }
 
+// TODO move to utility module
+function arrayPartition(inputArray: any[], splitIndex:number): any[][] {
+    const length = inputArray.length;
+    const first = inputArray.slice(0, splitIndex);
+    const second = inputArray.slice(splitIndex,length);
+    return [first, second];
+}
+
 // TGroup: one uninterrupted layout of a subsection of the table, e.g. one pageful.
 export class TGroup {
     cols: number;
@@ -85,15 +93,17 @@ export class TGroup {
     colspecs: ColSpec[];
     thead?: THead; // 0..1
     tbody: TBody;
+    
     constructor ( colspecs: ColSpec[], headRows: number, rows: Row[]){
+        const [tableHeadRows, tableBodyRows] = arrayPartition(rows, headRows);
         this.colspecs = colspecs;
         this.cols = this.colspecs.length;
         if (headRows > 0 ){
-            this.thead=new THead(rows=rows.slice(0,headRows));
-            this.tbody=new TBody(rows=rows.slice(headRows, rows.length));
+            this.thead=new THead(rows=tableHeadRows);
+            this.tbody=new TBody(rows=tableBodyRows);
         }else{
             this.thead=undefined;
-            this.tbody=new TBody(rows);
+            this.tbody=new TBody(tableBodyRows);
         }
     }
 }
