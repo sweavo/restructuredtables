@@ -153,7 +153,7 @@ export function fromGrid( input:string ):Table {
         {
             // Append a line to each of the cell buffers.
             line.split('|').slice(1,-1).forEach( (cellLine,i) => {
-                cells[rowIndex][i]+= sep + cellLine.slice(1,-1);
+                cells[rowIndex][i]+= sep + cellLine.slice(1,-1).trimEnd();
             });
             sep = '\n';
         }
