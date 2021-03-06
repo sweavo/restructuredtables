@@ -22,7 +22,7 @@ suite('CALS lib demonstrations', () => {
 		assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon, 'Hello, Mum!');
 		assert.strictEqual(table.isValid(), true);
 	});
-	test ('A table needs one tgroups',() => {
+	test ('A table needs one tgroup',() => {
 
 		const table = new cals.Table([]);
 
