@@ -182,7 +182,7 @@ suite('CALS lib demonstrations', () => {
 	
 		const table = cals.fromGrid(input);
 		assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon,'Now is the\nwinter of\nour\ndiscontent');
-		assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon,'Using bash:\n    $ ls');
+		assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon,'Using Bash:\n    $ ls');
 	});
 
 });
