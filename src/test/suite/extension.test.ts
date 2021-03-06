@@ -166,7 +166,7 @@ suite('CALS lib demonstrations', () => {
 		assert.strictEqual(table.tgroup[0].thead?.row.length,2, "checking for 2 header rows");
 		assert.strictEqual(table.tgroup[0].thead?.row[1].entry[2].paracon,'C    '); // bug [026] the whitespace should have been stripped
 		assert.strictEqual(table.tgroup[0].tbody.row.length,2, "checking for 2 body rows");
-		assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0],'1');
+		assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon,'1    '); // bug [026] the whitespace should have been stripped
 	});
 
 });
