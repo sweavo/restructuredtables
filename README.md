@@ -78,15 +78,28 @@ Indent on the left however is relevant, because it can start monospaced sections
     | Using Bash: | --> "Using Bash:\n    $ ls"
     |     $ ls    |
 
+Done.
+
+- `[Spike]` looking at how the UI will work.
+
+`CustomTextEditor` is potentially heavyweight, and might force me to replace all other functionality for ReST.  
+
+I didn't see a way to extract the table to another buffer and put it back.
+
+I didn't see a way to open a mini editor window for the cell contents.
+
+But I did find some hints about writing a formatter.  Perhaps use this API and specify a ReST formatter. https://code.visualstudio.com/blogs/2016/11/15/formatters-best-practices
+
+
 ## Backlog
 _(next:027)_
 
+- `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
+- `[001]` read a table from a string in the document
 - `[025]` split out cals.ts into datamodel and conversion functions
 - `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.
-- `[001]` read a table into a string from the document
-- `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[007]` investigate: in a table, hit a key to reformat to some flat view; hit it again to reconstitue the table.
 - `[008]` Allow more alignment options such that numbers can be right-aligned
 - `[011]` Add screenshots or animations to the docs
