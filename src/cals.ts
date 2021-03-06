@@ -99,8 +99,8 @@ export class TGroup {
         this.colspecs = colspecs;
         this.cols = this.colspecs.length;
         if (headRows > 0 ){
-            this.thead=new THead(rows=tableHeadRows);
-            this.tbody=new TBody(rows=tableBodyRows);
+            this.thead=new THead(tableHeadRows);
+            this.tbody=new TBody(tableBodyRows);
         }else{
             this.thead=undefined;
             this.tbody=new TBody(tableBodyRows);
