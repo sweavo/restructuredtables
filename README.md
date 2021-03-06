@@ -62,9 +62,21 @@ A "refactor" to perform the partitioning of `rows` in a separate function fixed 
 
 Fixing this on branch `refactor-after-023`. Done
 
-- `[026]` in fromgrid, strip trailing whitespace from paracons
+- `[026]` in fromGrid, strip trailing whitespace from paracons
 
-Actually, it probably makes sense to strip trailing whitespace from all lines within a cell
+Since fromGrid is restructuredText not CALS world, it's OK to acknowledge that the cell contents are ReST documents.  So whitespace tidying is appropriate.  Here's the rule: from each line within a cell (i.e. between the | characters), trim the single leftmost space and all the rightmost spaces. So:
+
+    | Now is the |
+    | winter of  |  --> "Now is the\nwinter of\nour\ndiscontent"
+    | our        |
+    | discontent |
+
+What to do with trailing newlines? I imagine ReST defines that as trimmed, so we can preserve or trim it as we see fit.
+
+Indent on the left however is relevant, because it can start monospaced sections, etc.
+
+    | Using Bash: | --> "Using Bash:\n    $ ls"
+    |     $ ls    |
 
 ## Backlog
 _(next:027)_
