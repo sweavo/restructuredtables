@@ -58,7 +58,9 @@ Something was going wrong here:
 
 The first of these two lines was leaving `rows` with only `headRows` rows, and then the second line was resulting in zero rows, presumably because `rows.length == headRows` by then.
 
-A "refactor" to perform the partitioning of `rows` in a separate function fixed the bug.
+A "refactor" to perform the partitioning of `rows` in a separate function fixed the bug. This is obviously not OK, so I went back and had a look. The answer: named parameters don't work like that in Javascript! In fact, they don't exist; what we use is de-structuring https://stackoverflow.com/a/42108988/11982419.
+
+Fixing this on branch `refactor-after-023`
 
 ## Backlog
 _(next:027)_
