@@ -99,6 +99,16 @@ export class TGroup {
         this.thead=headRows?new THead(tableHeadRows):undefined;
         this.tbody=new TBody(tableBodyRows);
     }
+
+    // There HAS to be a lighter way than duplicating the array
+    getAllRows() {
+        let returnArray = this.tbody.row;
+        if (this.thead !== undefined ){
+            returnArray.unshift( ... this.thead.row);
+        }
+        return returnArray;
+    }
+
 }
 
 // One logical table, which may span several pages or minipages, each with its own tgroup.
@@ -234,4 +244,47 @@ export function toGrid( input:Table ): string {
     });
 
     return lines.join('\n');
+}
+
+
+// functions for converting to and from listTable
+
+// Helper: take some lines representing ReST and indent them, with an optional list marker on the first row.
+export function toListElement( spaces: number, lines: string[], firstCharacter=" ") {
+    let lead = firstCharacter.padEnd(spaces,' ');
+    return lines.map( (line) => {
+        const buffer = lead + line;
+        lead = ''.padEnd(spaces,' ');
+        return buffer;
+    });
+}
+
+function cellTextToBullet( text: string ) {
+    return toListElement(2,text.split('\n'),'-');
+}
+
+
+export function toListTable( table: Table) {
+    let headerLines = [ '.. list-table::' ];
+
+    // Get the widths
+    const widths=table.tgroup[0].colspecs.map( (colspec: ColSpec) => colspec.colwidth );
+    headerLines.push('   :widths: ' + widths.join(' '));
+
+    // Count header rows
+    const headerRows = table.tgroup[0].thead?.row.length || 0;
+    headerLines.push('   :header-rows: ' + headerRows.toString());
+
+    // Blank line to separate directive from table
+    headerLines.push('');
+
+    // build the nested list.
+    const dataLines = table.tgroup[0].getAllRows().map((row)=>{
+        const cells = row.entry.map( (entry) => entry.paracon);
+        const cellLines = cells.map(cellTextToBullet);
+        const rowLines = Array.prototype.concat( ...cellLines);
+        return toListElement(2, rowLines, '*');
+    });
+        
+    return headerLines.concat(toListElement(4,Array.prototype.concat(... dataLines))).join('\n');
 }
