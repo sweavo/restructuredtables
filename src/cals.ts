@@ -89,7 +89,7 @@ export class TGroup {
     colspecs: ColSpec[];
     thead?: THead; // 0..1
     tbody: TBody;
-    
+
     constructor ( colspecs: ColSpec[], headRows: number, rows: Row[]){
         const [tableHeadRows, tableBodyRows] = arrayPartition(rows, headRows);
         this.colspecs = colspecs;
@@ -198,7 +198,7 @@ function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=
 // Given a cals table, write it as an RST gridtable
 export function toGrid( input:Table ): string {
     const colspecs = input.tgroup[0].colspecs;
-    const colwidths = colspecs.map((spec) => {return parseInt(spec.colwidth);});
+    const colwidths = colspecs.map((spec) => parseInt(spec.colwidth));
 
     // Prefab this line, which will be re-used a bunch.
     const headPlate = '+' + (colwidths.map( (w) => { return ''.padStart(w + 2,'-');}).join('+')) + '+';
