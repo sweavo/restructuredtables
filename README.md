@@ -126,8 +126,8 @@ Example:
 ## Backlog
 _(next:030)_
 
-- `[027]` fromList: convert a list-table to CALS
-- `[028]` toList: convert a list-table to CALS
+- `[027]` fromListTable: convert a list-table to CALS
+- `[028]` toListTable: convert from CALS to a list-table 
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[001]` read a table from a string in the document
