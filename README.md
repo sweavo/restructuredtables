@@ -90,10 +90,45 @@ I didn't see a way to open a mini editor window for the cell contents.
 
 But I did find some hints about writing a formatter.  Perhaps use this API and specify a ReST formatter. https://code.visualstudio.com/blogs/2016/11/15/formatters-best-practices
 
+### 2021-03-07
+
+Not knowing much about the possibilities of the UI, I'm faced with two options:
+
+1) spike a bunch of UI sketches to skill up, possibly building a whole language server
+2) build support for [list tables](https://docutils.sourceforge.io/docs/ref/rst/directives.html#list-table) and then allow a transform between the two.
+
+Option (2) is well documented and would provide a complete end-to-end MVP:  A command to translate between a gridTable and listTable.  Once the parsing of listtables is good enough, this would be releasable.
+
+**Goal** implement a command to transform a gridtable to a list table and back again. At first it doesn't have to understand every kind of list table, e.g. column widths can be mandatory.  We are talking about a two-level list, using leading spaces to indicate nesting level, and the presence of list markers to validate.
+
+Example:
+
+    .. list-table::
+        :widths: 15 10 30
+        :header-rows: 1
+
+        * - Treat
+          - Quantity
+          - Description
+        * - Albatross
+          - 2.99
+          - On a stick!
+        * - Crunchy Frog
+          - 1.49
+          - If we took the bones out, it wouldn't be
+            crunchy, now would it?
+        * - Gannet Ripple
+          - 1.99
+          - On a stick!
+
+**Note list-table does not support column-spanning, so it would need some customizing to extend it.
 
 ## Backlog
-_(next:027)_
+_(next:030)_
 
+- `[027]` fromList: convert a list-table to CALS
+- `[028]` toList: convert a list-table to CALS
+- `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[001]` read a table from a string in the document
 - `[025]` split out cals.ts into datamodel and conversion functions
