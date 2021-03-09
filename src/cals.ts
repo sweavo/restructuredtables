@@ -89,7 +89,7 @@ export class TGroup {
     colspecs: ColSpec[];
     thead?: THead; // 0..1
     tbody: TBody;
-    
+
     constructor ( colspecs: ColSpec[], headRows: number, rows: Row[]){
         const [tableHeadRows, tableBodyRows] = arrayPartition(rows, headRows);
         this.colspecs = colspecs;
@@ -99,6 +99,16 @@ export class TGroup {
         this.thead=headRows?new THead(tableHeadRows):undefined;
         this.tbody=new TBody(tableBodyRows);
     }
+
+    // There HAS to be a lighter way than duplicating the array
+    getAllRows() {
+        let returnArray = this.tbody.row;
+        if (this.thead !== undefined ){
+            returnArray.unshift( ... this.thead.row);
+        }
+        return returnArray;
+    }
+
 }
 
 // One logical table, which may span several pages or minipages, each with its own tgroup.
@@ -198,7 +208,7 @@ function writeRowMultiline( colwidths: number[], row: Row, callback: (l:string)=
 // Given a cals table, write it as an RST gridtable
 export function toGrid( input:Table ): string {
     const colspecs = input.tgroup[0].colspecs;
-    const colwidths = colspecs.map((spec) => {return parseInt(spec.colwidth);});
+    const colwidths = colspecs.map((spec) => parseInt(spec.colwidth));
 
     // Prefab this line, which will be re-used a bunch.
     const headPlate = '+' + (colwidths.map( (w) => { return ''.padStart(w + 2,'-');}).join('+')) + '+';
@@ -234,4 +244,47 @@ export function toGrid( input:Table ): string {
     });
 
     return lines.join('\n');
+}
+
+
+// functions for converting to and from listTable
+
+// Helper: take some lines representing ReST and indent them, with an optional list marker on the first row.
+export function toListElement( spaces: number, lines: string[], firstCharacter=" ") {
+    let lead = firstCharacter.padEnd(spaces,' ');
+    return lines.map( (line) => {
+        const buffer = lead + line;
+        lead = ''.padEnd(spaces,' ');
+        return buffer;
+    });
+}
+
+function cellTextToBullet( text: string ) {
+    return toListElement(2,text.split('\n'),'-');
+}
+
+
+export function toListTable( table: Table) {
+    let headerLines = [ '.. list-table::' ];
+
+    // Get the widths
+    const widths=table.tgroup[0].colspecs.map( (colspec: ColSpec) => colspec.colwidth );
+    headerLines.push('   :widths: ' + widths.join(' '));
+
+    // Count header rows
+    const headerRows = table.tgroup[0].thead?.row.length || 0;
+    headerLines.push('   :header-rows: ' + headerRows.toString());
+
+    // Blank line to separate directive from table
+    headerLines.push('');
+
+    // build the nested list.
+    const dataLines = table.tgroup[0].getAllRows().map((row)=>{
+        const cells = row.entry.map( (entry) => entry.paracon);
+        const cellLines = cells.map(cellTextToBullet);
+        const rowLines = Array.prototype.concat( ...cellLines);
+        return toListElement(2, rowLines, '*');
+    });
+        
+    return headerLines.concat(toListElement(4,Array.prototype.concat(... dataLines))).join('\n');
 }
