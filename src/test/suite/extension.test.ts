@@ -179,11 +179,19 @@ suite('CALS lib demonstrations', () => {
 | Using Bash: |
 |     $ ls    |
 +-------------+`;
-	
-		const table = cals.fromGrid(input);
-		assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon,'Now is the\nwinter of\nour\ndiscontent');
-		assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon,'Using Bash:\n    $ ls');
-	});
+    
+        const table = cals.fromGrid(input);
+        assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon,'Now is the\nwinter of\nour\ndiscontent');
+        assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon,'Using Bash:\n    $ ls');
+    });
+
+    test('`toListElement`: ',()=>{
+        const input =['here','are','some','lines'];
+        const expected = ['- here', '  are', '  some', '  lines'];
+        const output = cals.toListElement(2,input,'-');
+
+        assert.deepStrictEqual(output,expected);
+    });
 
     test('`[031]` fromGrid: blank lines at the end of multiline cells are trimmed.', () => {
         const input = `
@@ -200,5 +208,48 @@ suite('CALS lib demonstrations', () => {
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon, "0\n0\n1\n1");  
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[1].paracon, "0");  
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[2].paracon, "\nx");  
+	});
+	
+	test('`[028]` toListTable: convert from CALS to a list-table', () => {
+        // depends on fromGrid working :-)
+        const table = cals.fromGrid(`
++--------+--------+----------+
+| Person | Dad    | Mum      |
++========+========+==========+
+| Clive  | Simon  | Tasha    |
+|        |        | Wilkes   |
++--------+--------+----------+
+| Simon  | Darren | Sally    |
+|        |        | Jessop   |
++--------+--------+----------+
+| Tasha  | George | Philippa |
+|        |        | Dennis   |
++--------+--------+----------+`.substr(1));
+    
+        const expected = `
+.. list-table::
+   :widths: 6 5 7
+   :header-rows: 1
+
+    * - Person
+      - Dad
+      - Mum
+    * - Clive
+      - Simon
+      - Tasha
+        Wilkes
+    * - Simon
+      - Darren
+      - Sally
+        Jessop
+    * - Tasha
+      - George
+      - Philippa
+        Dennis`.substr(1);
+
+        const output = cals.toListTable(table);
+
+        assert.deepStrictEqual(output,expected);
+
     });
 });
