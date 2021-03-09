@@ -185,4 +185,20 @@ suite('CALS lib demonstrations', () => {
 		assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon,'Using Bash:\n    $ ls');
 	});
 
+    test('`[031]` fromGrid: blank lines at the end of multiline cells are trimmed.', () => {
+        const input = `
++---+---+---+
+| A | B | C |
++===+===+===+
+| 0 | 0 |   |
+| 0 |   | x |
+| 1 |   |   |
+| 1 |   |   |
++---+---+---+`.substr(1);
+
+        const table = cals.fromGrid(input);
+        assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon, "0\n0\n1\n1");  
+        assert.strictEqual(table.tgroup[0].tbody.row[0].entry[1].paracon, "0");  
+        assert.strictEqual(table.tgroup[0].tbody.row[0].entry[2].paracon, "\nx");  
+    });
 });

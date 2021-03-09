@@ -123,11 +123,19 @@ Example:
 
 **Note list-table does not support column-spanning, so it would need some customizing to extend it.
 
+- `[028]` toListTable: convert from CALS to a list-table 
+
+Got this mostly done on the branch, but MIKADO PUSH I need to trim trailing blank lines from cell contents on read.
+
+### 2021-03-09
+
+- PUSH `[031]` fromGrid: blank lines at the end of multiline cells are trimmed.
+
+
 ## Backlog
-_(next:030)_
+_(next:031)_
 
 - `[027]` fromListTable: convert a list-table to CALS
-- `[028]` toListTable: convert from CALS to a list-table 
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[001]` read a table from a string in the document
