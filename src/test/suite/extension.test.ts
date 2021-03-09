@@ -228,7 +228,7 @@ suite('CALS lib demonstrations', () => {
     
         const expected = `
 .. list-table::
-   :widths: 6 5 7
+   :widths: 6 6 8
    :header-rows: 1
 
     * - Person
