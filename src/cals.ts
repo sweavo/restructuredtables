@@ -159,7 +159,12 @@ export function fromGrid( input:string ):Table {
         }
     });
 
-    return tableHelper( widths, cells, headerRows );
+    // trim trailing whitespace from each cell
+    cells = cells.map( 
+        (row) => row.map(
+            (str)=> str.trimEnd()));
+    
+            return tableHelper( widths, cells, headerRows );
 }
 
 // Shortcut to a cals table from a couple of JS arrays

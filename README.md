@@ -127,7 +127,9 @@ Example:
 
 Got this mostly done on the branch, but MIKADO PUSH I need to trim trailing blank lines from cell contents on read.
 
-- `[031]` fromGrid: blank lines at the end of multiline cells are trimmed.
+### 2021-03-09
+
+- PUSH `[031]` fromGrid: blank lines at the end of multiline cells are trimmed.
 
 
 ## Backlog

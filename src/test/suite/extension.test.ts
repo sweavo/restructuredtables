@@ -199,6 +199,6 @@ suite('CALS lib demonstrations', () => {
         const table = cals.fromGrid(input);
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon, "0\n0\n1\n1");  
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[1].paracon, "0");  
-        assert.strictEqual(table.tgroup[0].tbody.row[0].entry[1].paracon, "\nx");  
+        assert.strictEqual(table.tgroup[0].tbody.row[0].entry[2].paracon, "\nx");  
     });
 });
