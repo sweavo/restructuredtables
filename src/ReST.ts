@@ -160,7 +160,7 @@ export function getListItems( lines:string[]) {
     let output:string[][]=[];
     let item:string[] = [];
     // Match the leading spaces, the bullet, and the spaces between the bullet and the text
-    const lineLeadPieces = lines[0].match(/^(\s+)([-\*])(\s+)/);
+    const lineLeadPieces = lines[0].match(/^(\s*)([-\*])(\s+)/);
     
     if (lineLeadPieces === null) {
         return [['error']];
@@ -209,7 +209,12 @@ export function fromListTable( text: string ) {
     // Second argument is header rows
     const headerRows=parseInt(getReSTParameter(lines[2]));
 
-    // After the blank line, we have rows and columns. TODO
+    // After the blank line, we have rows and columns. 
+    const rowsOfReST = getListItems(lines.slice(4)); // Array of rows, where each row is a strings[] representing an ReST list
+    const rowsOfCellsOfArraysOfReST = rowsOfReST.map(getListItems); // Array of rows, where each row is an array of entries, where each entry is a strings[] representing lines.
+
+    // HACK this seems to me to nest one too many times, but it passes the test, so...
+    const rowsOfCellsOfTextOfReST = rowsOfCellsOfArraysOfReST.map( (cellsOfArraysOfReST)=>cellsOfArraysOfReST).map( (arrayOfReST) => arrayOfReST.map( (dunno) => dunno.join('\n')));
     
-    return cals.tableHelper(widthInts,[],headerRows);
+    return cals.tableHelper(widthInts,rowsOfCellsOfTextOfReST,headerRows);
 }

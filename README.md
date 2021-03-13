@@ -140,10 +140,18 @@ POP to `[028]` and the test now passes. Done
 - PUSH - `[025]` split out cals.ts into datamodel and conversion functions
 
 Actually this means ReST and cals modules.
-Done
+Done 025
 
 POP to `[027]`.
 
+`[027]` is done with MANY caveats.  Created ticket `[031]` to go back and toughen it up to work generically for ReST tables.
+
+As it stands, it insists that the bullets are - or *, and it does not actually parse the list-table directive; it just assumes it
+has one and jumps straight to the parameters, which also must be at the same line offsets from the directive as is written by toListTable.
+
+We have enough now to make a vscode action that transforms a table between grid and list.
+
+Done. 027
 
 ## Backlog
 _(next:032)_
