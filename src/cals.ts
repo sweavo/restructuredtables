@@ -290,5 +290,10 @@ export function toListTable( table: Table) {
 }
 
 export function fromListTable( text: string ) {
+    const lines =  text.split('\n');
+
+    // Brutally simple right now, assumes correctness of input and that markup is 
+    // as written by toListTable.
+    
     return tableHelper([],[],0);
 }

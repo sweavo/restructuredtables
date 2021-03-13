@@ -138,8 +138,9 @@ POP to `[028]` and the test now passes. Done
 
 
 ## Backlog
-_(next:031)_
+_(next:032)_
 
+- `[031]` fromListTable: read up on ReST and support more valid inputs
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[001]` read a table from a string in the document
