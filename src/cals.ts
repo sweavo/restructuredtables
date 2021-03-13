@@ -289,11 +289,23 @@ export function toListTable( table: Table) {
     return headerLines.concat(toListElement(4,Array.prototype.concat(... dataLines))).join('\n');
 }
 
+function getReSTParameter(line: string) {
+    return line.split(':')[2].trim();
+}
+
 export function fromListTable( text: string ) {
     const lines =  text.split('\n');
 
     // Brutally simple right now, assumes correctness of input and that markup is 
     // as written by toListTable.
+    // First argument is widths
+    const widthStrings=getReSTParameter(lines[1]).split(' ');
+    const widthInts=widthStrings.map(a=>parseInt(a)); // why not map(parseInt) ? see https://medium.com/dailyjs/parseint-mystery-7c4368ef7b21   
     
-    return tableHelper([],[],0);
+    // Second argument is header rows
+    const headerRows=parseInt(getReSTParameter(lines[2]));
+
+    // After the blank line, we have rows and columns. TODO
+    
+    return tableHelper(widthInts,[],headerRows);
 }
