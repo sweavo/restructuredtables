@@ -1,3 +1,4 @@
+import { listenerCount } from 'node:events';
 import *  as cals from './cals';
 
 export function getReSTParameter(line: string) {
@@ -152,6 +153,13 @@ export function toListTable( table: cals.Table) {
     });
         
     return headerLines.concat(toListElement(4,Array.prototype.concat(... dataLines))).join('\n');
+}
+
+export function getListItems( lines:string[]) {
+    let output=[];
+    const matches = lines[0].match(/^\s+[-\*]\s+/);
+    const indent:string =  matches?matches[0]:"";
+    return [];
 }
 
 export function fromListTable( text: string ) {
