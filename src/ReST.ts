@@ -1,3 +1,4 @@
+import { assert } from 'node:console';
 import { listenerCount } from 'node:events';
 import *  as cals from './cals';
 
@@ -156,10 +157,44 @@ export function toListTable( table: cals.Table) {
 }
 
 export function getListItems( lines:string[]) {
-    let output=[];
-    const matches = lines[0].match(/^\s+[-\*]\s+/);
-    const indent:string =  matches?matches[0]:"";
-    return [];
+    let output:string[][]=[];
+    let item:string[] = [];
+    // Match the leading spaces, the bullet, and the spaces between the bullet and the text
+    const lineLeadPieces = lines[0].match(/^(\s+)([-\*])(\s+)/);
+    
+    if (lineLeadPieces === null) {
+        return [['error']];
+    }
+    
+    const bulletLead = lineLeadPieces[1] + lineLeadPieces[2] + lineLeadPieces[3];
+    const leadLength = bulletLead.length;
+    // derive the start of a continuation line
+    const continuationLead = lineLeadPieces[1] + ' ' + lineLeadPieces[3];
+    lines.forEach( (line) => {
+        if (line.substr(0,leadLength) === bulletLead )
+        {
+            if ( item.length ) {
+                output.push(item);
+            }
+            item = [line.substr(leadLength)];
+        }
+        else if ( line.substr(0,leadLength) === continuationLead )
+        {
+            item.push( line.substr(leadLength));
+        }
+        else
+        {
+            if ( item.length ) {
+                output.push(item);
+            }
+            return output;
+        }
+
+    });
+    if ( item.length ) {
+        output.push(item);
+    }
+    return output;
 }
 
 export function fromListTable( text: string ) {

@@ -297,16 +297,16 @@ suite('CALS lib demonstrations', () => {
     test('getListItems', () => {
         const input = `
             - hello
-            mum
+              mum
             - greetings
-            * my
-            * friend
+              * my
+              * friend
             - welcome
             - good evening
             - hello
-            darkness
-            my old
-            friend`.substr(1).split('\n');
+              darkness
+              my old
+              friend`.substr(1).split('\n');
     
         const expected = [
           [ 'hello', 'mum' ],
