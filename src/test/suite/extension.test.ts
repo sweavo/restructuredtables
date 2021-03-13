@@ -252,4 +252,44 @@ suite('CALS lib demonstrations', () => {
         assert.deepStrictEqual(output,expected);
 
     });
+
+    test('`[027]` fromListTable: convert a list-table to CALS', () => {
+        const input=`
+.. list-table::
+    :widths: 15 10 30
+    :header-rows: 1
+
+    * - Treat
+      - Quantity
+      - Description
+    * - Albatross
+      - 2.99
+      - On a stick!
+    * - Crunchy Frog
+      - 1.49
+      - If we took the bones out, it 
+        wouldn't be crunchy, now, 
+        would it?
+    * - Gannet Ripple
+      - 1.99
+      - On a stick!`.substr(1);
+    const expected=`
++-----------------+------------+--------------------------------+
+| Treat           | Quantity   | Description                    |
++=================+============+================================+
+| Albatross       | 2.99       | On a stick!                    |
++-----------------+------------+--------------------------------+
+| Crunchy Frog    | 1.49       | If we took the bones out, it   |
+|                 |            | wouldn't be crunchy, now,      |
+|                 |            | would it?                      |
++-----------------+------------+--------------------------------+
+| Gannet Ripple   | 1.99       | On a stick!                    |
++-----------------+------------+--------------------------------+`.substr(1);
+
+    const table=cals.fromList(input);
+
+    const output=cals.toGrid(table);
+
+    assert.strictEqual(output,expected);
+    });
 });
