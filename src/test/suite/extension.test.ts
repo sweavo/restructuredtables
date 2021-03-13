@@ -7,6 +7,7 @@ import { execPath } from 'process';
 import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
 import * as cals from '../../cals';
+import * as ReST from '../../ReST';
 
 suite('CALS lib demonstrations', () => {
     //vscode.window.showInformationMessage('Start all tests.');
@@ -31,7 +32,7 @@ suite('CALS lib demonstrations', () => {
     });
     test ('toGrid: write a 1x1 grid', () => {
 
-        const output = cals.toGrid( cals.tableHelper([2],[['Yo']]) );
+        const output = ReST.toGrid( cals.tableHelper([2],[['Yo']]) );
 
         assert.strictEqual( output, '+----+\n| Yo |\n+----+');
 
@@ -39,7 +40,7 @@ suite('CALS lib demonstrations', () => {
 
     test ('toGrid: write one two-column row', () => {
 
-        const output = cals.toGrid( cals.tableHelper([2,5],[['Yo', 'There']]) );
+        const output = ReST.toGrid( cals.tableHelper([2,5],[['Yo', 'There']]) );
 
         assert.strictEqual( output, '+----+-------+\n| Yo | There |\n+----+-------+');
 
@@ -47,7 +48,7 @@ suite('CALS lib demonstrations', () => {
 
     test ('toGrid: write two two-column rows', () => {
 
-        const output = cals.toGrid( cals.tableHelper([2,5],[['Yo', 'There'],
+        const output = ReST.toGrid( cals.tableHelper([2,5],[['Yo', 'There'],
                                                             ['Hi', 'Matey']]) );
 
         assert.strictEqual( output, '+----+-------+\n| Yo | There |\n+----+-------+\n| Hi | Matey |\n+----+-------+');
@@ -67,9 +68,9 @@ suite('CALS lib demonstrations', () => {
 | 1 | 1 | 1   |
 +---+---+-----+`;
 
-        const table = cals.fromGrid( input );
+        const table = ReST.fromGrid( input );
 
-        const output = cals.toGrid( table );
+        const output = ReST.toGrid( table );
 
         assert.strictEqual(output, input);
 
@@ -85,7 +86,7 @@ suite('CALS lib demonstrations', () => {
 | 1 | 1 | 1 |
 +---+---+---+`;
 
-        const table = cals.fromGrid( input );
+        const table = ReST.fromGrid( input );
 
         assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon, '0\n0\n1\n1');
 
@@ -103,7 +104,7 @@ suite('CALS lib demonstrations', () => {
 
         const table = cals.tableHelper([1,1,1], [['A','B','C'],['0\n0\n1\n1', '0','\nx']]);
 
-        const output = cals.toGrid( table );
+        const output = ReST.toGrid( table );
 
         assert.strictEqual(output, expected);
 
@@ -119,9 +120,9 @@ suite('CALS lib demonstrations', () => {
 | 1 |   |   |
 +---+---+---+`;
 
-        const table = cals.fromGrid(input);
+        const table = ReST.fromGrid(input);
 
-        const output = cals.toGrid( table );
+        const output = ReST.toGrid( table );
 
         assert.strictEqual(output, input);
 
@@ -145,7 +146,7 @@ suite('CALS lib demonstrations', () => {
 | 4     | 5     | 6     |
 +-------+-------+-------+`;
 
-        const output = cals.toGrid( table );
+        const output = ReST.toGrid( table );
 
         assert.strictEqual(output, expected);
     });
@@ -161,7 +162,7 @@ suite('CALS lib demonstrations', () => {
 | 4     | 5     | 6     |
 +-------+-------+-------+`;
 
-        const table = cals.fromGrid(input);
+        const table = ReST.fromGrid(input);
 
         assert.strictEqual(table.tgroup[0].thead?.row.length,2, "checking for 2 header rows");
         assert.strictEqual(table.tgroup[0].thead?.row[1].entry[2].paracon,'C');
@@ -180,7 +181,7 @@ suite('CALS lib demonstrations', () => {
 |     $ ls    |
 +-------------+`;
     
-        const table = cals.fromGrid(input);
+        const table = ReST.fromGrid(input);
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon,'Now is the\nwinter of\nour\ndiscontent');
         assert.strictEqual(table.tgroup[0].tbody.row[1].entry[0].paracon,'Using Bash:\n    $ ls');
     });
@@ -188,7 +189,7 @@ suite('CALS lib demonstrations', () => {
     test('`toListElement`: ',()=>{
         const input =['here','are','some','lines'];
         const expected = ['- here', '  are', '  some', '  lines'];
-        const output = cals.toListElement(2,input,'-');
+        const output = ReST.toListElement(2,input,'-');
 
         assert.deepStrictEqual(output,expected);
     });
@@ -204,7 +205,7 @@ suite('CALS lib demonstrations', () => {
 | 1 |   |   |
 +---+---+---+`.substr(1);
 
-        const table = cals.fromGrid(input);
+        const table = ReST.fromGrid(input);
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[0].paracon, "0\n0\n1\n1");  
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[1].paracon, "0");  
         assert.strictEqual(table.tgroup[0].tbody.row[0].entry[2].paracon, "\nx");  
@@ -212,7 +213,7 @@ suite('CALS lib demonstrations', () => {
 	
 	test('`[028]` toListTable: convert from CALS to a list-table', () => {
         // depends on fromGrid working :-)
-        const table = cals.fromGrid(`
+        const table = ReST.fromGrid(`
 +--------+--------+----------+
 | Person | Dad    | Mum      |
 +========+========+==========+
@@ -247,7 +248,7 @@ suite('CALS lib demonstrations', () => {
       - Philippa
         Dennis`.substr(1);
 
-        const output = cals.toListTable(table);
+        const output = ReST.toListTable(table);
 
         assert.deepStrictEqual(output,expected);
 
@@ -286,9 +287,9 @@ suite('CALS lib demonstrations', () => {
 | Gannet Ripple   | 1.99       | On a stick!                    |
 +-----------------+------------+--------------------------------+`.substr(1);
 
-    const table=cals.fromListTable(input);
+    const table=ReST.fromListTable(input);
 
-    const output=cals.toGrid(table);
+    const output=ReST.toGrid(table);
 
     assert.strictEqual(output,expected);
     });

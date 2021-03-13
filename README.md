@@ -133,8 +133,16 @@ Got this mostly done on the branch, but MIKADO PUSH I need to trim trailing blan
 
 POP to `[028]` and the test now passes. Done
 
+### 2021-03-13
+
 - `[027]` fromListTable: convert a list-table to CALS
 
+- PUSH - `[025]` split out cals.ts into datamodel and conversion functions
+
+Actually this means ReST and cals modules.
+Done
+
+POP to `[027]`.
 
 
 ## Backlog
@@ -144,7 +152,6 @@ _(next:032)_
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[001]` read a table from a string in the document
-- `[025]` split out cals.ts into datamodel and conversion functions
 - `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.
