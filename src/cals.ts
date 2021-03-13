@@ -288,3 +288,7 @@ export function toListTable( table: Table) {
         
     return headerLines.concat(toListElement(4,Array.prototype.concat(... dataLines))).join('\n');
 }
+
+export function fromListTable( text: string ) {
+    return tableHelper([],[],0);
+}

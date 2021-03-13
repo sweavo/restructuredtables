@@ -286,7 +286,7 @@ suite('CALS lib demonstrations', () => {
 | Gannet Ripple   | 1.99       | On a stick!                    |
 +-----------------+------------+--------------------------------+`.substr(1);
 
-    const table=cals.fromList(input);
+    const table=cals.fromListTable(input);
 
     const output=cals.toGrid(table);
 
