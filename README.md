@@ -131,11 +131,15 @@ Got this mostly done on the branch, but MIKADO PUSH I need to trim trailing blan
 
 - PUSH `[031]` fromGrid: blank lines at the end of multiline cells are trimmed.
 
+POP to `[028]` and the test now passes. Done
+
+- `[027]` fromListTable: convert a list-table to CALS
+
+
 
 ## Backlog
 _(next:031)_
 
-- `[027]` fromListTable: convert a list-table to CALS
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[001]` read a table from a string in the document
