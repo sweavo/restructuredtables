@@ -29,6 +29,7 @@ function findTableRange( document: vscode.TextDocument, startLine: number  ) {
 				new vscode.Position(end, 0));
 }
 
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -40,11 +41,15 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('restructuredtables.gridTableToListTable', () => {
+	let disposable = vscode.commands.registerCommand('restructuredtables.gridTableToListTable', (editor, edit) => {
 		// Display a message box to the user
 		vscode.window.showInformationMessage('restructuredTables received "gridTableToListTable".');
 
-		
+		let position = editor.selection.active;
+		const detectedRange=findTableRange(editor.document,position.line);
+		editor.selection=new vscode.Selection( detectedRange.start, detectedRange.end);
+
+
 	});
 
 	context.subscriptions.push(disposable);
