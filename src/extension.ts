@@ -16,13 +16,12 @@ function findTableRange( document: vscode.TextDocument, startLine: number  ) {
 	let end = startLine;
 	const maxLine = document.lineCount;
 	
-	for ( let cursor=start; cursor>=0 && isTableLine( document.lineAt(cursor).text); --cursor) {
-		start=cursor;		
-	}
-
-	for ( let cursor=start; cursor<=maxLine && isTableLine( document.lineAt(cursor).text); ++cursor) {
-		end=cursor;		
-	}
+	for ( let cursor=startLine; 
+			cursor>=0 && isTableLine( document.lineAt(cursor).text); 
+			start=cursor--) {};
+	for ( let cursor=startLine; 
+			cursor<=maxLine && isTableLine( document.lineAt(cursor).text); 
+			end=++cursor ) {};
 
 	return new vscode.Range( 
 				new vscode.Position(start, 0),
@@ -41,15 +40,16 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('restructuredtables.gridTableToListTable', (editor, edit) => {
+	let disposable = vscode.commands.registerTextEditorCommand('restructuredtables.gridTableToListTable', (editor, edit) => {
 		// Display a message box to the user
 		vscode.window.showInformationMessage('restructuredTables received "gridTableToListTable".');
-
-		let position = editor.selection.active;
+		console.log('ResTables: get selection');
+		const position=editor.selection.active;
+		console.log('ResTables: got line: ' + position.line);
 		const detectedRange=findTableRange(editor.document,position.line);
+		console.log('ResTables: detected the range of the table');
 		editor.selection=new vscode.Selection( detectedRange.start, detectedRange.end);
-
-
+		console.log('ResTables: set selection. Done');
 	});
 
 	context.subscriptions.push(disposable);
