@@ -10,14 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:restructuredtables.helloWorld"
+		"onCommand:restructuredtables.gridTableToListTable"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "restructuredtables.helloWorld",
-				"title": "Hello World"
+				"command": "restructuredtables.gridTableToListTable",
+				"title": "restructuredTables: GridToList"
 			}
 		]
 	},
