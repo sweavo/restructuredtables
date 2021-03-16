@@ -153,17 +153,33 @@ We have enough now to make a vscode action that transforms a table between grid 
 
 Done. 027
 
-## Backlog
-_(next:032)_
+#### 2021-03-14
 
+I'm feeling like I have enough plumbiong to try an actual action in vscode.  If your cursor is inside a gridtable, I can convert it to a listtable.
+
+- `[007]` investigate: in a table, hit a key to reformat to some flat view; hit it again to reconstitute the table.
+
+To find what gridtable we're in, we check that our line starts with _indent_ ( _pipe_ | _plus_ ), then scan up and down to find the first line in each direction that does not conform with that. The resulting set of lines can be de-indented and passed to fromGrid and then to toListTable, and injected back into the document.
+
+#### 2021-03-16
+
+Got the spike working for gridToList.  Now that I've figured how to retrieve and rewrite the document text, I'm happy to defer the detection of listTables' extents.  Now I just need to know how to build a vscode "integration test".
+
+See https://code.visualstudio.com/api/working-with-extensions/testing-extension#:~:text=Visual%20Studio%20Code%20supports%20running%20and%20debugging%20tests,that%20can%20run%20without%20a%20VS%20Code%20instance.
+
+## Backlog
+_(next:034)_
+
+- `[032]` vscode action to convert from gridtable to listtable
+- `[033]` vscode action to convert from listtable to gridtable
 - `[031]` fromListTable: read up on ReST and support more valid inputs
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
 - `[001]` read a table from a string in the document
+- `[021]` read up on pandoc support for CALS tables: there will be no point in supporting certain features.
 - `[004]` gridtable parsing to handle when the table is indented
 - `[019]` how should CALS represent column width in characters?
 - `[020]` Do we need CALS to hold on to whether or not grid lines are shown? Consider both in the source and whether the source can specify what is rendered.
-- `[007]` investigate: in a table, hit a key to reformat to some flat view; hit it again to reconstitue the table.
 - `[008]` Allow more alignment options such that numbers can be right-aligned
 - `[011]` Add screenshots or animations to the docs
 - `[012]` Read the [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
@@ -174,7 +190,6 @@ _(next:032)_
 - `[016]` EPIC allow the cell contents to be reflowed by parsing them as RST.
 - `[017]` EPIC given [016], use the volume of text in columns to come up with the column widths.
 - `[022]` when reflowing a cell that contains | characters, avoid putting them directly below a +. (Defer until colspan)
-- `[021]` read up on pandoc support for CALS tables: there will be no point in supporting certain features.
 
 ## Requirements
 
