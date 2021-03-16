@@ -15,14 +15,16 @@ function findTableRange( document: vscode.TextDocument, startLine: number  ) {
 	let start = startLine;
 	let end = startLine;
 	const maxLine = document.lineCount;
-	
+	console.log('ReSTables: count to start');
 	for ( let cursor=startLine; 
 			cursor>=0 && isTableLine( document.lineAt(cursor).text); 
 			start=cursor--) {};
+	console.log('ReSTables: count to end');
 	for ( let cursor=startLine; 
-			cursor<=maxLine && isTableLine( document.lineAt(cursor).text); 
+			cursor<maxLine && isTableLine( document.lineAt(cursor).text); 
 			end=++cursor ) {};
 
+	console.log('ReSTables:return the range');
 	return new vscode.Range( 
 				new vscode.Position(start, 0),
 				new vscode.Position(end, 0));
