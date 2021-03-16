@@ -163,7 +163,7 @@ To find what gridtable we're in, we check that our line starts with _indent_ ( _
 
 #### 2021-03-16
 
-Got the spike working.  Now I just need to know how to build a vscode "integration test".
+Got the spike working for gridToList.  Now that I've figured how to retrieve and rewrite the document text, I'm happy to defer the detection of listTables' extents.  Now I just need to know how to build a vscode "integration test".
 
 See https://code.visualstudio.com/api/working-with-extensions/testing-extension#:~:text=Visual%20Studio%20Code%20supports%20running%20and%20debugging%20tests,that%20can%20run%20without%20a%20VS%20Code%20instance.
 
