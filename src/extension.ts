@@ -9,7 +9,8 @@ function isTableLine( line: string) : boolean {
 	return (line.match(/^\s*[|+]/))?true:false;
 }
 
-// Given a vscode document, and a line on which the cursor appears, return the first and last+1
+// Given a vscode document, and a line on which the cursor appears, return the range that
+// contains the text of the table rendition.
 // lines of the table. If first == last then there was no table found.
 function findTableRange( document: vscode.TextDocument, startLine: number  ) {
 	let start = startLine;
@@ -22,12 +23,15 @@ function findTableRange( document: vscode.TextDocument, startLine: number  ) {
 	console.log('ReSTables: count to end');
 	for ( let cursor=startLine; 
 			cursor<maxLine && isTableLine( document.lineAt(cursor).text); 
-			end=++cursor ) {};
+			end=cursor++ ) {};
 
+	const lastColumn = 
+	
 	console.log('ReSTables:return the range');
+
 	return new vscode.Range( 
 				new vscode.Position(start, 0),
-				new vscode.Position(end, 0));
+				document.lineAt(end).range.end );
 }
 
 
@@ -50,8 +54,12 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log('ResTables: got line: ' + position.line);
 		const detectedRange=findTableRange(editor.document,position.line);
 		console.log('ResTables: detected the range of the table');
-		editor.selection=new vscode.Selection( detectedRange.start, detectedRange.end);
-		console.log('ResTables: set selection. Done');
+		const originalText=editor.document.getText( detectedRange);
+
+		const replacementText=ReST.toListTable( ReST.fromGrid(originalText) );
+		console.log('ResTables: prepared a replacement');
+		edit.replace( detectedRange, replacementText);
+		console.log('ResTables: replaced.. Done');
 	});
 
 	context.subscriptions.push(disposable);

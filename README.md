@@ -161,8 +161,11 @@ I'm feeling like I have enough plumbiong to try an actual action in vscode.  If 
 
 To find what gridtable we're in, we check that our line starts with _indent_ ( _pipe_ | _plus_ ), then scan up and down to find the first line in each direction that does not conform with that. The resulting set of lines can be de-indented and passed to fromGrid and then to toListTable, and injected back into the document.
 
+#### 2021-03-16
 
+Got the spike working.  Now I just need to know how to build a vscode "integration test".
 
+See https://code.visualstudio.com/api/working-with-extensions/testing-extension#:~:text=Visual%20Studio%20Code%20supports%20running%20and%20debugging%20tests,that%20can%20run%20without%20a%20VS%20Code%20instance.
 
 ## Backlog
 _(next:034)_
