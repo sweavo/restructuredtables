@@ -167,11 +167,24 @@ Got the spike working for gridToList.  Now that I've figured how to retrieve and
 
 See https://code.visualstudio.com/api/working-with-extensions/testing-extension#:~:text=Visual%20Studio%20Code%20supports%20running%20and%20debugging%20tests,that%20can%20run%20without%20a%20VS%20Code%20instance.
 
+#### 2021-03-22
+
+There was an unholy mess on one of my dev machines owing to not having fully pushed the spike branch on my work machine. One of the hazards of using DVCS without sleep.
+
+Since I failed to gain confidence in making vscode integration tests, I've decided to go ahead without, and just merge the 007 spike branch into main to make the first feature.
+
+- `[032]` vscode action to convert from gridtable to listtable
+
+So this is done, though not tested :-/
+
+Next, let's take a branch for this part:
+
+- `[033]` vscode action to convert from listtable to gridtable
+
+
 ## Backlog
 _(next:034)_
 
-- `[032]` vscode action to convert from gridtable to listtable
-- `[033]` vscode action to convert from listtable to gridtable
 - `[031]` fromListTable: read up on ReST and support more valid inputs
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
