@@ -200,10 +200,17 @@ So likely helper functions:
 
 * `ReST.parseList(lines)` --- return an array of arrays of lines representing the list items of the ReST list whose source is provided in `lines`.
 
+#### 2021-03-23
+
+So, it didn't work out much like the design above; getCurrentReSTBlock was instead implemented by extracting the match criteria from findTableRange to create getCompliantRange.  parseList already existed.
+
+Now I have transforms both ways, but only if line endings are Unix.
+
 
 ## Backlog
 _(next:034)_
 
+- `[034]` test transformation both ways and fix issues with CRLF
 - `[031]` fromListTable: read up on ReST and support more valid inputs
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.
