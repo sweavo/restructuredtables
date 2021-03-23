@@ -9,21 +9,24 @@ function isTableLine( line: string) : boolean {
 	return (line.match(/^\s*[|+]/))?true:false;
 }
 
+function isNotEmptyLine( line:string) : boolean {
+	return line.trim().length > 0;
+}
 
 // Given a vscode document, and a line on which the cursor appears, return the range that
 // contains the text of the table rendition.
 // lines of the table. If first == last then there was no table found.
-function findCompliantRange( document: vscode.TextDocument, startLine: number, filter: (line:string)=>boolean ) {
+function findCompliantRange( document: vscode.TextDocument, startLine: number, filterCallback: (line:string)=>boolean ) {
 	let start = startLine;
 	let end = startLine;
 	const maxLine = document.lineCount;
 	console.log('ReSTables: count to start');
 	for ( let cursor=startLine; 
-			cursor>=0 && isTableLine( document.lineAt(cursor).text); 
+			cursor>=0 && filterCallback( document.lineAt(cursor).text); 
 			start=cursor--) {};
 	console.log('ReSTables: count to end');
 	for ( let cursor=startLine; 
-			cursor<maxLine && isTableLine( document.lineAt(cursor).text); 
+			cursor<maxLine && filterCallback( document.lineAt(cursor).text); 
 			end=cursor++ ) {};
 
 	const lastColumn = 
