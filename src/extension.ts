@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log('ResTables: got line: ' + position.line);
 		const detectedRange=findTableRange(editor.document,position.line);
 		console.log('ResTables: detected the range of the table');
-		const originalText=editor.document.getText( detectedRange);
+		const originalText=editor.document.getText(detectedRange);
 
 		const replacementText=ReST.toListTable( ReST.fromGrid(originalText) );
 		console.log('ResTables: prepared a replacement');
@@ -74,7 +74,22 @@ export function activate(context: vscode.ExtensionContext) {
 	disposable = vscode.commands.registerTextEditorCommand('restructuredtables.listTableToGridTable', (editor, edit) => {
 		const position=editor.selection.active;
 		const detectedRange=findCompliantRange(editor.document, position.line, isNotEmptyLine);
-		editor.selection=new vscode.Selection( detectedRange.start, detectedRange.end);
+		let originalText=editor.document.getText(detectedRange);
+		let expandedRange;
+		if (ReST.is2LevelList(originalText)) {
+			const prefixRange=findCompliantRange(editor.document, detectedRange.start.line-2, isNotEmptyLine);
+			originalText = editor.document.getText(prefixRange) + '\n\n' + originalText;
+			expandedRange=new vscode.Range(prefixRange.start,detectedRange.end);
+		}
+		else
+		{
+			const suffixRange=findCompliantRange(editor.document, detectedRange.end.line+2, isNotEmptyLine);
+			originalText = originalText + '\n\n' + editor.document.getText(suffixRange);
+			expandedRange=new vscode.Range(detectedRange.start,suffixRange.end);
+		}
+
+		const replacementText=ReST.toGrid(ReST.fromListTable(originalText));
+		edit.replace( expandedRange, replacementText);
 	});
 }
 

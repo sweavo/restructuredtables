@@ -1,5 +1,6 @@
 import { assert } from 'node:console';
 import { listenerCount } from 'node:events';
+import { TextDecoder } from 'node:util';
 import *  as cals from './cals';
 
 export function getReSTParameter(line: string) {
@@ -217,4 +218,8 @@ export function fromListTable( text: string ) {
     const rowsOfCellsOfTextOfReST = rowsOfCellsOfArraysOfReST.map( (cellsOfArraysOfReST)=>cellsOfArraysOfReST).map( (arrayOfReST) => arrayOfReST.map( (dunno) => dunno.join('\n')));
     
     return cals.tableHelper(widthInts,rowsOfCellsOfTextOfReST,headerRows);
+}
+
+export function is2LevelList( text: string) {
+    return text.match(/^(\s*)([-\*])(\s+)([-\*])/)!==null;
 }
