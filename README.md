@@ -181,10 +181,36 @@ Next, let's take a branch for this part:
 
 - `[033]` vscode action to convert from listtable to gridtable
 
+Approach here is first to figure out how to detect the listtable.  It's a 2-level nested list that is preceded by a command block. So we're looking for 
+
+BLANK LINE
+`.. list-table::`.*
+INDENT .* (x 0...n lines)
+BLANK LINE
+LIST of LIST of MINIDOC
+BLANK LINE
+
+To detect that the cursor is inside a list-table, we should go up and down until we find blank lines, then see whether what we have is a directive block or a 2-deep list.  If neither, abandon.  If the former then search the next block to be a 2-list; if the latter then search the previous block to be a directive block.
+
+So likely helper functions:
+
+* `getCurrentReSTBlock(doc, line)` --- returns the array of lines that are between blank lines and containing the given line
+
+* `ReST.recognizeDirectiveBlock(lines, directive)` --- returns whether or not the array of lines represents a block containing directive `directive`.
+
+* `ReST.parseList(lines)` --- return an array of arrays of lines representing the list items of the ReST list whose source is provided in `lines`.
+
+#### 2021-03-23
+
+So, it didn't work out much like the design above; getCurrentReSTBlock was instead implemented by extracting the match criteria from findTableRange to create getCompliantRange.  parseList already existed.
+
+Now I have transforms both ways, but only if line endings are Unix.
+
 
 ## Backlog
 _(next:034)_
 
+- `[034]` test transformation both ways and fix issues with CRLF
 - `[031]` fromListTable: read up on ReST and support more valid inputs
 - `[029]` fromList, toList: have some round-trip tests.
 - `[006]` investigate: in a table cell, press a key to open the cell's contents in a new editor.  Close to save back to the cell.

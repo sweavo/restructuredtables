@@ -10,7 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:restructuredtables.gridTableToListTable"
+		"onCommand:restructuredtables.gridTableToListTable",
+		"onCommand:restructuredtables.listTableToGridTable"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -18,8 +19,26 @@
 			{
 				"command": "restructuredtables.gridTableToListTable",
 				"title": "restructuredTables: GridToList"
+			},
+			{
+				"command": "restructuredtables.listTableToGridTable",
+				"title": "restructuredTables: ListToGrid"
 			}
-		]
+		],
+		"keybindings": [
+            {
+                "command": "restructuredtables.gridTableToListTable",
+                "key": "ctrl+alt+t l",
+                "mac": "cmd+alt+t l",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "restructuredtables.listTableToGridTable",
+                "key": "ctrl+alt+t g",
+                "mac": "cmd+alt+t g",
+                "when": "editorTextFocus"
+            }
+        ]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
