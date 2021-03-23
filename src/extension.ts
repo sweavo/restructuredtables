@@ -9,10 +9,11 @@ function isTableLine( line: string) : boolean {
 	return (line.match(/^\s*[|+]/))?true:false;
 }
 
+
 // Given a vscode document, and a line on which the cursor appears, return the range that
 // contains the text of the table rendition.
 // lines of the table. If first == last then there was no table found.
-function findTableRange( document: vscode.TextDocument, startLine: number  ) {
+function findCompliantRange( document: vscode.TextDocument, startLine: number, filter: (line:string)=>boolean ) {
 	let start = startLine;
 	let end = startLine;
 	const maxLine = document.lineCount;
@@ -34,6 +35,9 @@ function findTableRange( document: vscode.TextDocument, startLine: number  ) {
 				document.lineAt(end).range.end );
 }
 
+function findTableRange( document: vscode.TextDocument, startline: number ) {
+	return findCompliantRange( document, startline, isTableLine );
+}
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
