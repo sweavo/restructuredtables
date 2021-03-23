@@ -70,6 +70,12 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	disposable = vscode.commands.registerTextEditorCommand('restructuredtables.listTableToGridTable', (editor, edit) => {
+		const position=editor.selection.active;
+		const detectedRange=findCompliantRange(editor.document, position.line, isNotEmptyLine);
+		editor.selection=new vscode.Selection( detectedRange.start, detectedRange.end);
+	});
 }
 
 // this method is called when your extension is deactivated
